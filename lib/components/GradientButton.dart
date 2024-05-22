@@ -12,6 +12,7 @@ class GradientButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         gradient: const LinearGradient(
@@ -31,6 +32,7 @@ class GradientButton extends StatelessWidget {
         child: Text(
           this.text,
           style: const TextStyle(
+            fontSize: 16,
             color: Colors.white,
             fontWeight: FontWeight.w400
           ),

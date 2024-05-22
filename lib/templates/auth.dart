@@ -39,13 +39,16 @@ class _AuthPage extends State<AuthPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Padding(
-                padding: new EdgeInsets.all(25),
+                padding: new EdgeInsets.symmetric(
+                  horizontal: 25,
+                  vertical: 50,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     const Text("Hallo",
                       style: TextStyle(
                         color: Colors.white,
@@ -60,7 +63,7 @@ class _AuthPage extends State<AuthPage> {
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
-                        fontWeight: FontWeight.w600
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ],
