@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "../components/GradientButton.dart";
+import "../../components/GradientButton.dart";
 
 class LoginPage extends StatefulWidget {
   final String title;
