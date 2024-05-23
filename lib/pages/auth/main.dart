@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "../../layouts/layout1.dart";
+import "../../layouts/pageOnBG.dart";
 import "./login.dart";
 import "./register.dart";
 
@@ -22,7 +22,7 @@ class _AuthPage extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Layout1(
+    return PageOnBG(
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(

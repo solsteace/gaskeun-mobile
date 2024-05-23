@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Layout1 extends StatelessWidget {
+class PageOnBG extends StatelessWidget {
   final List<Widget> children;
 
-  Layout1({
+  PageOnBG({
     required this.children
   });
 
