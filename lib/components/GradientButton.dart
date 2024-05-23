@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GradientButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String text;
 
   GradientButton({
@@ -15,10 +15,15 @@ class GradientButton extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-          colors: [
+          colors: this.onPressed == null
+          ? [
+              Colors.grey,
+              const Color.fromARGB(255, 59, 59, 59),
+            ]
+          : [
               Color(0xFFFFBCFF),
               Color(0xFF0117FF),
           ]
