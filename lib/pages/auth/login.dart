@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import "../../components/GradientButton.dart";
 
+import "../carOrder/main.dart";
+import "../../models/Car.dart";
+
 class LoginPage extends StatefulWidget {
   final String title;
   final Function(String) setAuthLocation;
@@ -26,7 +29,7 @@ class _LoginPage extends State<LoginPage> {
     });
   }
 
-  Widget _buildForm() {
+  Widget _buildForm(VoidCallback onSubmit) {
     return Column(
       children: <Widget> [
         TextFormField(
@@ -49,8 +52,7 @@ class _LoginPage extends State<LoginPage> {
         ),
         const SizedBox(height: 20),
         GradientButton(
-          onPressed: () {
-          }, 
+          onPressed: onSubmit, 
           text: "Masuk"
         ),
       ]
@@ -85,7 +87,28 @@ class _LoginPage extends State<LoginPage> {
             fontWeight: FontWeight.w400
           ),
         ),
-        _buildForm(), 
+        _buildForm(() {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => CarOrderPage(
+                car: Car(
+                  id: 1, 
+                  providerId: 1, 
+                  carImageId: 1, 
+                  capacity: 4, 
+                  price: 300000, 
+                  brand: "Toyota",
+                  model: "Innova Zenix", 
+                  description: "Deskripsi", 
+                  status: "Tersedia", 
+                  plateNumber: "E 3 JIR", 
+                  transmission: "Manual", 
+                  fuel: "Bensin"
+                )
+              )
+            )
+          );
+        }), 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
