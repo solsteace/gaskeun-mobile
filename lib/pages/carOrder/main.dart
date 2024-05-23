@@ -1,6 +1,3 @@
-import "dart:ui";
-
-import "package:flutter/cupertino.dart";
 import 'package:flutter/material.dart';
 import "package:flutter/widgets.dart";
 import "package:gaskeun_mobile/components/GradientButton.dart";
@@ -9,10 +6,7 @@ import "package:gaskeun_mobile/models/Car.dart";
 
 class CarOrderPage extends StatefulWidget {
   final Car car;
-  CarOrderPage({
-    Key? key, 
-    required this.car,
-  }) : super(key: key);
+  CarOrderPage({ Key? key, required this.car}) : super(key: key);
 
   @override 
   State<CarOrderPage> createState() => _carOrderPage();
@@ -23,23 +17,27 @@ class _carOrderPage extends State<CarOrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    const subheadingStyle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: Colors.white
+    );
+
     return PageWithAppBar(
       title: "${widget.car.brand} ${widget.car.model}",
       children: <Widget>[
-        Expanded(
-          // https://stackoverflow.com/questions/53577962/better-way-to-load-images-from-network-flutter
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            alignment: Alignment.center,
-            child: Image.network(
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTam7-Ui9GARJ79WSpBJyB_z9IGpLBnbCvWPajZYD3muQ&s",
-              loadingBuilder: (context, child, loadingProgress) {
-                if(loadingProgress == null) return child;
-                return const CircularProgressIndicator();
-              }
-            )
+        // https://stackoverflow.com/questions/53577962/better-way-to-load-images-from-network-flutter
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          alignment: Alignment.center,
+          child: Image.network(
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTam7-Ui9GARJ79WSpBJyB_z9IGpLBnbCvWPajZYD3muQ&s",
+            loadingBuilder: (context, child, loadingProgress) {
+              if(loadingProgress == null) return child;
+              return const CircularProgressIndicator();
+            }
           )
-        ),
+        ) ,
         Container(
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
@@ -49,10 +47,7 @@ class _carOrderPage extends State<CarOrderPage> {
             gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [
-                 Color(0xFFFFBCFF),
-                 Color(0xFF0117FF),
-              ]
+              colors: [ Color(0xFFFFBCFF), Color(0xFF0117FF) ]
             )
           ),
 
@@ -60,33 +55,23 @@ class _carOrderPage extends State<CarOrderPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                  left: 25, right: 25,
-                  top: 40, bottom: 10
+                  left: 25, right: 25, top: 40, bottom: 20
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Spesifikasi",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white
-                      ),
+                    const Text( "Spesifikasi", style: subheadingStyle),
+                    const SizedBox(height: 10),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: _buildCarSpec()
                     ),
-                    const SizedBox(height: 5),
-                    _buildCarSpec(),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Syarat dan Ketentuan",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white
-                      ),
-                    ),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 25),
+
+                    const Text( "Syarat dan Ketentuan", style: subheadingStyle),
+                    const SizedBox(height: 10),
                     _buildTnC(),
+                    const SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -99,10 +84,7 @@ class _carOrderPage extends State<CarOrderPage> {
                         const Flexible( 
                           child: Text(
                             "Saya menyetujui semua Syarat & Ketentuan yang berlaku",
-                            style: TextStyle(
-                              fontSize: 9,
-                              color: Color(0xFFFF6969),
-                            )
+                            style: TextStyle( fontSize: 10, color: Color(0xFFFF6969),)
                           )
                         )
                       ],
@@ -111,9 +93,7 @@ class _carOrderPage extends State<CarOrderPage> {
                 )
               ),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 15, horizontal: 25
-                ),
+                padding: const EdgeInsets.symmetric( vertical: 15, horizontal: 25),
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
@@ -161,7 +141,8 @@ class _carOrderPage extends State<CarOrderPage> {
       "Memberikan deposit sebagai jaminan keamanan",
       "Bertanggung jawab atas kerusakan mobil selama masa sewa",
       "Mematuhi peraturan lalu lintas yang berlaku",
-      "Pemesanan dan pembayaran dapat dilakukan melalui website dan aplikasi",
+      "Pemesanan dapat dilakukan melalui website dan aplikasi",
+      "Pembayaran dapat dilakukan melalui website dan aplikasi",
       "Pembayaran sewa dilakukan secara offline",
       "Penyewa bertanggung jawab atas segala kerusakan yang terjadi pada mobil selama masa sewa",
       "Rental mobil tidak bertanggung jawab atas kehilangan barang bawaan penyewa"
@@ -174,7 +155,7 @@ class _carOrderPage extends State<CarOrderPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: entries.map((entry) {
         const textStyle = TextStyle(
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: FontWeight.w400,
           color: Colors.white,
         );
@@ -183,11 +164,7 @@ class _carOrderPage extends State<CarOrderPage> {
             children: <Widget>[
             const Text( "\u2022 ", style: textStyle ),
               Expanded(
-                child: Text(
-                  entry, 
-                  textAlign: TextAlign.justify,
-                  style: textStyle
-                )
+                child: Text(entry, textAlign: TextAlign.justify, style: textStyle)
               ),
             ],
           );
@@ -197,49 +174,45 @@ class _carOrderPage extends State<CarOrderPage> {
 
   Widget _buildCarSpec() {
     final List<Map> specEntries = [
-      {
-        "metric": "capacity",
+      { "metric": "capacity",
         "icon": Icons.person,
-        "data": "${widget.car.capacity} orang"
-      },
-      {
-        "metric": "transmission",
+        "data": "${widget.car.capacity} orang" },
+      { "metric": "transmission",
         "icon": Icons.settings,
-        "data": widget.car.transmission
-      },
-      {
-        "metric": "fuel",
+        "data": widget.car.transmission },
+      { "metric": "fuel",
         "icon": Icons.local_gas_station,
-        "data": widget.car.fuel
-      },
+        "data": widget.car.fuel },
+      { "metric": "fuel",
+        "icon": Icons.tag,
+        "data": widget.car.plateNumber},
     ];
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: specEntries.map((item) => (
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.white
-            ),
-            child: Column(
-              key: ValueKey(item["metric"]),
-              children: [ 
-                Icon( item["icon"], ), 
-                Text( 
-                  item["data"], 
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600
-                  ) 
+        Container(
+          margin: const EdgeInsets.only(right: 10),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.white
+          ),
+          child: Column(
+            key: ValueKey(item["metric"]),
+            children: [ 
+              Icon( item["icon"] ), 
+              Text( 
+                item["data"], 
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600
                 ) 
-              ],
-            ),
-          )
-        )       
+              ) 
+            ],
+          ),
+        )
       )).toList()
     );
   }

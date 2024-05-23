@@ -22,7 +22,7 @@ class PageWithAppBar extends StatelessWidget {
         title: Text(
           this.title,
           style: const TextStyle(
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             fontSize: 16
           )
         ),
@@ -32,10 +32,12 @@ class PageWithAppBar extends StatelessWidget {
           alignment: Alignment.topLeft,
           width: double.infinity,
           height: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: this.children,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: this.children,
+            )
           )
         )
       )
