@@ -27,7 +27,7 @@ class _AuthPage extends State<AuthPage> {
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 25,
-            vertical: 50,
+            vertical: 30,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -61,9 +61,9 @@ class _AuthPage extends State<AuthPage> {
             ),
             color: Colors.white,
           ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 25,
-            vertical: 44,
+          padding: const EdgeInsets.only(
+            left: 25, right: 25,
+            top: 40, bottom: 10
           ),
           width: double.infinity,
           child: ( _authLocation == "login"

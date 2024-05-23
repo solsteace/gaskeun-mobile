@@ -12,6 +12,7 @@ class GradientButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 35,
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -19,20 +20,15 @@ class GradientButton extends StatelessWidget {
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
           colors: this.onPressed == null
-          ? [
-              Colors.grey,
-              const Color.fromARGB(255, 59, 59, 59),
-            ]
-          : [
-              Color(0xFFFFBCFF),
-              Color(0xFF0117FF),
-          ]
+          ? [ Colors.grey, const Color.fromARGB(255, 59, 59, 59)]
+          : [ Color(0xFFFFBCFF), Color(0xFF0117FF)]
         )
       ),
       child: ElevatedButton(
         onPressed: this.onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent
+          backgroundColor: Colors.transparent,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
         child: Text(
           this.text,
