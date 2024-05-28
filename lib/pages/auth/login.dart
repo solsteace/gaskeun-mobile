@@ -30,7 +30,8 @@ class _LoginPage extends State<LoginPage> {
     });
   }
 
-  Widget _buildForm() {
+  @override
+  Widget build(BuildContext context) {
     var requestCompleted = true;
     void toggleRequestCompleted() {
       setState(() {
@@ -106,57 +107,6 @@ class _LoginPage extends State<LoginPage> {
           ),
         ]
       )
-    );
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              "Selamat Datang di",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700
-              ),
-            ),
-            SizedBox(height:10),
-            SizedBox(
-              height: 25, width: 100,
-              child: Image(
-                image: AssetImage("assets/img/logo-navbar.png")
-              )
-            )
-          ],
-        ),
-        const SizedBox(height: 60),
-        const Text(
-          "Masukkan email dan password Anda untuk mendapatkan akses semua fitur kami",
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w400
-          ),
-        ),
-        _buildForm(), 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("Belum punya akun?"),
-            TextButton(
-              child: const Text("Register"),
-              onPressed: () => {
-                widget.setAuthLocation("register")
-              }
-            )
-          ],
-        )
-      ]
     );
   }
 }
