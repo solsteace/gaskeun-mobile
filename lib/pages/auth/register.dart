@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import "../../components/GradientButton.dart";
 
 class RegisterPage extends StatefulWidget {
@@ -55,9 +53,7 @@ class _RegisterPage extends State<RegisterPage> {
       child: Column(
         children: <Widget> [
           TextFormField(
-            decoration: const InputDecoration(
-              hintText: "Nama Lengkap"
-            ),
+            decoration: const InputDecoration( hintText: "Nama Lengkap"),
             controller: _fFullName,
             validator: (value) {
               if(!isFilled(value)) {
@@ -68,9 +64,7 @@ class _RegisterPage extends State<RegisterPage> {
           ),
           const SizedBox(height: 20),
           TextFormField(
-            decoration: const InputDecoration(
-              hintText: "Email anda"
-            ),
+            decoration: const InputDecoration( hintText: "Email anda"),
             controller: _fEmail,
             validator: (value) {
               if(!isFilled(value)) {
@@ -93,6 +87,8 @@ class _RegisterPage extends State<RegisterPage> {
             validator: (value) {
               if(!isFilled(value)) {
                 return "This field has to be filled";
+              } else if(value!.length < 8) {
+                return "Password has to be at least 8 characters";
               }
               return null;
             }

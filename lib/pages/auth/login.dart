@@ -48,9 +48,7 @@ class _LoginPage extends State<LoginPage> {
       child: Column(
         children: <Widget> [
           TextFormField(
-            decoration: const InputDecoration(
-              hintText: "Email anda"
-            ),
+            decoration: const InputDecoration( hintText: "Email anda"),
             controller: _fEmail,
             validator: (value) {
               if(!isFilled(value)) {
@@ -94,7 +92,7 @@ class _LoginPage extends State<LoginPage> {
                         model: "Innova Zenix", 
                         description: "Deskripsi", 
                         status: "Tersedia", 
-                        plateNumber: "E 3 JIR", 
+                        plateNumber: "E 13 JIR", 
                         transmission: "Manual", 
                         fuel: "Bensin"
                       )
