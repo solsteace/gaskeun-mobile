@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import "../../components/GradientButton.dart";
 
 class RegisterPage extends StatefulWidget {
@@ -162,7 +164,7 @@ class _RegisterPage extends State<RegisterPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        const Column(
+         const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
@@ -172,7 +174,13 @@ class _RegisterPage extends State<RegisterPage> {
                 fontWeight: FontWeight.w700
               ),
             ),
-            Text("Gaskeun"), // Change this into logo later
+            SizedBox(height:10),
+            SizedBox(
+              height: 25, width: 100,
+              child: Image(
+                image: AssetImage("assets/img/logo-navbar.png")
+              )
+            )
           ],
         ),
         const SizedBox(height: 60),

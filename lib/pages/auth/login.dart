@@ -126,7 +126,13 @@ class _LoginPage extends State<LoginPage> {
                 fontWeight: FontWeight.w700
               ),
             ),
-            Text("Gaskeun"), // Change this into logo later
+            SizedBox(height:10),
+            SizedBox(
+              height: 25, width: 100,
+              child: Image(
+                image: AssetImage("assets/img/logo-navbar.png")
+              )
+            )
           ],
         ),
         const SizedBox(height: 60),
