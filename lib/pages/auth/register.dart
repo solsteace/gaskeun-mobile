@@ -15,11 +15,11 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPage extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
   final _fFullName = TextEditingController();
   final _fEmail = TextEditingController();
   final _fPassword = TextEditingController();
   final _fConfirmPassword = TextEditingController();
-
 
   var _passwordHidden = true;
   void _toggleHidePassword() {
@@ -36,52 +36,122 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   Widget _buildForm() {
-    return Column(
-      children: <Widget> [
-        TextFormField(
-          decoration: const InputDecoration(
-            hintText: "Nama Lengkap"
+    var requestCompleted = true;
+    void toggleRequestCompleted() {
+      setState(() {
+        requestCompleted = !requestCompleted;
+      });
+    }
+
+    bool isFilled(value) {
+      return !(value.isEmpty || value == null);
+    }
+
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget> [
+          TextFormField(
+            decoration: const InputDecoration(
+              hintText: "Nama Lengkap"
+            ),
+            controller: _fFullName,
+            validator: (value) {
+              if(!isFilled(value)) {
+                return "This field has to be filled";
+              }
+              return null;
+            }
           ),
-          controller: _fFullName
-        ),
-        const SizedBox(height: 20),
-        TextFormField(
-          decoration: const InputDecoration(
-            hintText: "Email anda"
+          const SizedBox(height: 20),
+          TextFormField(
+            decoration: const InputDecoration(
+              hintText: "Email anda"
+            ),
+            controller: _fEmail,
+            validator: (value) {
+              if(!isFilled(value)) {
+                return "This field has to be filled";
+              }
+              return null;
+            }
           ),
-          controller: _fEmail
-        ),
-        const SizedBox(height: 20),
-        TextFormField(
-          obscureText: _passwordHidden,
-          decoration: InputDecoration(
-            hintText: "Password anda",
-            suffixIcon: IconButton(
-              onPressed: _toggleHidePassword,
-              icon: Icon(_passwordHidden? Icons.visibility: Icons.visibility_off)
-            )
+          const SizedBox(height: 20),
+          TextFormField(
+            obscureText: _passwordHidden,
+            decoration: InputDecoration(
+              hintText: "Password anda",
+              suffixIcon: IconButton(
+                onPressed: _toggleHidePassword,
+                icon: Icon(_passwordHidden? Icons.visibility: Icons.visibility_off)
+              )
+            ),
+            controller: _fPassword,
+            validator: (value) {
+              if(!isFilled(value)) {
+                return "This field has to be filled";
+              }
+              return null;
+            }
           ),
-          controller: _fPassword,
-        ),
-        const SizedBox(height: 20),
-        TextFormField(
-          obscureText: _confirmPasswordHidden,
-          decoration: InputDecoration(
-            hintText: "Konfirmasi Password",
-            suffixIcon: IconButton(
-              onPressed: _toggleHideConfirmPassword,
-              icon: Icon(_confirmPasswordHidden? Icons.visibility: Icons.visibility_off)
-            )
+          const SizedBox(height: 20),
+          TextFormField(
+            obscureText: _confirmPasswordHidden,
+            decoration: InputDecoration(
+              hintText: "Konfirmasi Password",
+              suffixIcon: IconButton(
+                onPressed: _toggleHideConfirmPassword,
+                icon: Icon(_confirmPasswordHidden? Icons.visibility: Icons.visibility_off)
+              )
+            ),
+            controller: _fConfirmPassword,
+            validator: (value) {
+              if(!isFilled(value)) {
+                return "This field has to be filled";
+              }
+
+              var hasMatchingPassword = _fPassword.text == _fConfirmPassword.text;
+              if(!hasMatchingPassword) {
+                return "Confirmation password should match with password";
+              }
+
+              return null;
+            }
           ),
-          controller: _fConfirmPassword,
-        ),
-        const SizedBox(height: 20),
-        GradientButton(
-          onPressed: () {
-          }, 
-          text: "Daftar"
-        ),
-      ]
+          const SizedBox(height: 20),
+          GradientButton(
+            onPressed: () {
+              if(_formKey.currentState!.validate()) {
+                // toggleRequestCompleted();
+                // showDialog<String>(
+                //   context: context, 
+                //   builder: (BuildContext context) => (
+                //     AlertDialog(
+                //       title: const Text("Please wait"),
+                //       content: const Column(
+                //         children: <Widget>[
+                //           CircularProgressIndicator(),
+                //           Text("Currently processing your data")
+                //         ]
+                //       ),
+                //       actions: <Widget>[
+                //         TextButton(
+                //           onPressed: () {
+                //             toggleRequestCompleted();
+                //             return Navigator.pop(context, "Ok");
+                //           }, 
+                //           child: const Text("Ok")
+                //         )
+                //       ],
+                //     )
+                //   )
+                // );
+              }
+            }, 
+            text: "Daftar"
+          ),
+        ]
+      ) ,
     );
   }
 

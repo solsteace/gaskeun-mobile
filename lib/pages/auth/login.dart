@@ -18,6 +18,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPage extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   final _fEmail = TextEditingController();
   final _fPassword = TextEditingController();
   
@@ -29,33 +30,82 @@ class _LoginPage extends State<LoginPage> {
     });
   }
 
-  Widget _buildForm(VoidCallback onSubmit) {
-    return Column(
-      children: <Widget> [
-        TextFormField(
-          decoration: const InputDecoration(
-            hintText: "Email anda"
+  Widget _buildForm() {
+    var requestCompleted = true;
+    void toggleRequestCompleted() {
+      setState(() {
+        requestCompleted = !requestCompleted;
+      });
+    }
+
+    bool isFilled(value) {
+      return !(value.isEmpty || value == null);
+    }
+
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget> [
+          TextFormField(
+            decoration: const InputDecoration(
+              hintText: "Email anda"
+            ),
+            controller: _fEmail,
+            validator: (value) {
+              if(!isFilled(value)) {
+                return "This field has to be filled";
+              }
+              return null;
+            }
           ),
-          controller: _fEmail
-        ),
-        const SizedBox(height: 20),
-        TextFormField(
-          obscureText: _passwordHidden,
-          decoration: InputDecoration(
-            hintText: "Password anda",
-            suffixIcon: IconButton(
-              onPressed: _toggleHidePassword,
-              icon: Icon(_passwordHidden? Icons.visibility: Icons.visibility_off)
-            )
+          const SizedBox(height: 20),
+          TextFormField(
+            obscureText: _passwordHidden,
+            decoration: InputDecoration(
+              hintText: "Password anda",
+              suffixIcon: IconButton(
+                onPressed: _toggleHidePassword,
+                icon: Icon(_passwordHidden? Icons.visibility: Icons.visibility_off)
+              )
+            ),
+            controller: _fPassword,
+            validator: (value) {
+              if(!isFilled(value)) {
+                return "This field has to be filled";
+              }
+              return null;
+            }
           ),
-          controller: _fPassword,
-        ),
-        const SizedBox(height: 20),
-        GradientButton(
-          onPressed: onSubmit, 
-          text: "Masuk"
-        ),
-      ]
+          const SizedBox(height: 20),
+          GradientButton(
+            onPressed: () {
+              if(_formKey.currentState!.validate()) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CarOrderPage(
+                      car: Car(
+                        id: 1, 
+                        providerId: 1, 
+                        carImageId: 1, 
+                        capacity: 4, 
+                        price: 300000, 
+                        brand: "Toyota",
+                        model: "Innova Zenix", 
+                        description: "Deskripsi", 
+                        status: "Tersedia", 
+                        plateNumber: "E 3 JIR", 
+                        transmission: "Manual", 
+                        fuel: "Bensin"
+                      )
+                    )
+                  )
+                );
+              }
+            }, 
+            text: "Masuk"
+          ),
+        ]
+      )
     );
   }
 
@@ -87,28 +137,7 @@ class _LoginPage extends State<LoginPage> {
             fontWeight: FontWeight.w400
           ),
         ),
-        _buildForm(() {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => CarOrderPage(
-                car: Car(
-                  id: 1, 
-                  providerId: 1, 
-                  carImageId: 1, 
-                  capacity: 4, 
-                  price: 300000, 
-                  brand: "Toyota",
-                  model: "Innova Zenix", 
-                  description: "Deskripsi", 
-                  status: "Tersedia", 
-                  plateNumber: "E 3 JIR", 
-                  transmission: "Manual", 
-                  fuel: "Bensin"
-                )
-              )
-            )
-          );
-        }), 
+        _buildForm(), 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

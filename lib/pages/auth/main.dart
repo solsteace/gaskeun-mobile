@@ -53,6 +53,7 @@ class _AuthPage extends State<AuthPage> {
             ],
           ),
         ),
+        // const Spacer(),
         Container(
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
