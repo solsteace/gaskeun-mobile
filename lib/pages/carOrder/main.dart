@@ -3,6 +3,7 @@ import "package:flutter/widgets.dart";
 import "package:gaskeun_mobile/components/GradientButton.dart";
 import "package:gaskeun_mobile/layouts/pageWithAppBar.dart";
 import "package:gaskeun_mobile/models/Car.dart";
+import "./orderDetail.dart";
 
 class CarOrderPage extends StatefulWidget {
   final Car car;
@@ -117,7 +118,12 @@ class _carOrderPage extends State<CarOrderPage> {
                       child: GradientButton(
                         onPressed: (!_approvedTnC
                           ? null: () {
-                            print("Hell");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderDetailPage(car: widget.car), // Navigate to OrderDetailPage
+                              ),
+                            );
                           }
                         ), 
                         text: "GASSS"
