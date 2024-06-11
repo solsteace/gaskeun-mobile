@@ -108,7 +108,7 @@ class _AuthPage extends State<AuthPage> {
                       _onSuccessAuth("Login success", () { // TODO store logged user data!
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => HomePage(title: "Home", user: 1))
+                            builder: (context) => HomePage(title: "Home", user: 1, index: 0))
                         );
                       });
                     },

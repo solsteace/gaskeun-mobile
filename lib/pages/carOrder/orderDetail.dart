@@ -3,11 +3,12 @@ import "package:gaskeun_mobile/layouts/pageOnBG.dart";
 import "package:gaskeun_mobile/components/GradientButton.dart";
 import 'package:file_picker/file_picker.dart';
 import "package:gaskeun_mobile/models/Car.dart";
+import "./orderSuccess.dart";
 
 class OrderDetailPage extends StatefulWidget {
   final Car car;
-  OrderDetailPage({ Key? key, required this.car}) : super(key: key);
-  
+  OrderDetailPage({Key? key, required this.car}) : super(key: key);
+
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
 }
@@ -95,7 +96,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             padding: const EdgeInsets.only(
               left: 25,
               right: 25,
-              top: 40,
+              top: 30,
               bottom: 10,
             ),
             width: double.infinity,
@@ -231,7 +232,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             ],
                           ),
                           TextFormField(
-                            keyboardType: TextInputType.number, // Set keyboard type to numeric
+                            keyboardType: TextInputType
+                                .number, // Set keyboard type to numeric
                             decoration: const InputDecoration(
                               labelText: 'No Telepon',
                             ),
@@ -309,7 +311,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 : () {
                                     if (_formKey.currentState!.validate()) {
                                       _formKey.currentState!.save();
-                                      print("heaven");
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => OrderSuccessPage(),
+                                        ),
+                                      );
                                     }
                                   }),
                             text: 'Konfirmasi Pemesanan',

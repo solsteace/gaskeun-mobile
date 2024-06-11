@@ -5,7 +5,8 @@ import "../profilePage/main.dart";
 class HomePage extends StatefulWidget {
   final String title;
   final int user;
-  HomePage({Key? key, required this.title, required this.user})
+  final int index;
+  HomePage({Key? key, required this.title, required this.user, required this.index})
       : super(key: key);
 
   @override
@@ -13,8 +14,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  int openedMenu = 0;
-  PageController pc = PageController(initialPage: 0);
+  late int openedMenu = widget.index;
+  late PageController pc = PageController(initialPage: widget.index);
 
   @override
   Widget build(BuildContext context) {
