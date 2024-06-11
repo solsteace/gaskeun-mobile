@@ -33,14 +33,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool _authenticated = false;
+  // TODO: persistent auth
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _authenticated? AuthPage(title: "nAuthenticated"): AuthPage(title: "Authenticated"),
-      ),
+      body: Center( child: AuthPage(title: "nAuthenticated")),
     );
   }
 }
