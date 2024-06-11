@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:gaskeun_mobile/pages/home/myCarPage.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -31,6 +32,7 @@ class _HomePage extends State<HomePage> {
             Center(
               child: InkWell( child: Text('Go to Home page', style: TextStyle(fontSize: 30)),)
             ),
+            CarPage(),
             Center(
               child: Text('Email page', style: TextStyle(fontSize: 30)),
             ),

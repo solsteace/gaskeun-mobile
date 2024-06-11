@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import "package:gaskeun_mobile/pages/home/main.dart";
 import "../../components/GradientButton.dart";
 
 import "../carOrder/main.dart";
 import "../../models/Car.dart";
+import "../home/main.dart";
 
 class LoginPage extends StatefulWidget {
   final String title;
@@ -75,29 +77,16 @@ class _LoginPage extends State<LoginPage> {
               return null;
             }
           ),
-          const SizedBox(height: 20),
           GradientButton(
             onPressed: () {
-              if(_formKey.currentState!.validate()) {
-                Navigator.of(context).push(
+              if (_formKey.currentState!.validate()) {
+                Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => CarOrderPage(
-                      car: Car(
-                        id: 1, 
-                        providerId: 1, 
-                        carImageId: 1, 
-                        capacity: 4, 
-                        price: 300000, 
-                        brand: "Toyota",
-                        model: "Innova Zenix", 
-                        description: "Deskripsi", 
-                        status: "Tersedia", 
-                        plateNumber: "E 13 JIR", 
-                        transmission: "Manual", 
-                        fuel: "Bensin"
-                      )
-                    )
-                  )
+                    builder: (context) => HomePage(
+                      title: "Book",
+                      user: 1,
+                    ),
+                  ),
                 );
               }
             }, 
