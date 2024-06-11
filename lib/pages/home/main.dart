@@ -1,16 +1,14 @@
 import "package:flutter/material.dart";
 import 'package:gaskeun_mobile/pages/home/myCarPage.dart';
+import "../profilePage/main.dart";
 
 class HomePage extends StatefulWidget {
   final String title;
   final int user;
-  HomePage({
-    Key? key, 
-    required this.title,
-    required this.user
-  }) : super(key: key);
+  HomePage({Key? key, required this.title, required this.user})
+      : super(key: key);
 
-  @override 
+  @override
   State<HomePage> createState() => _HomePage();
 }
 
@@ -26,19 +24,21 @@ class _HomePage extends State<HomePage> {
         child: PageView(
           controller: pc,
           onPageChanged: (index) {
-            setState(() { openedMenu = index; });
+            setState(() {
+              openedMenu = index;
+            });
           },
-          children: const [
+          children: [
             Center(
-              child: InkWell( child: Text('Go to Home page', style: TextStyle(fontSize: 30)),)
-            ),
+                child: InkWell(
+              child: Text('Go to Home page', style: TextStyle(fontSize: 30)),
+            )),
             CarPage(),
             Center(
               child: Text('Email page', style: TextStyle(fontSize: 30)),
             ),
-            Center(
-              child: Text('Profile page', style: TextStyle(fontSize: 30)),
-            ),
+            ProfilePage(
+                token: "19|8w0h3sPxMBWn97bDpyu4VgrBOrk7CG6bza8T5Vriac06120b")
           ],
         ),
       ),
@@ -49,7 +49,9 @@ class _HomePage extends State<HomePage> {
         unselectedItemColor: Colors.grey,
         currentIndex: openedMenu,
         onTap: (index) {
-          setState(() { openedMenu = index; });
+          setState(() {
+            openedMenu = index;
+          });
           pc.animateToPage(
             index,
             duration: const Duration(milliseconds: 200),
@@ -70,11 +72,11 @@ class _HomePage extends State<HomePage> {
             label: 'My Bookings',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person),
+            icon: Icon(Icons.person),
             label: 'Profile',
           ),
         ],
       ),
-    );   
+    );
   }
 }
