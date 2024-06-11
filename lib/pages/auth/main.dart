@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import "../../layouts/pageOnBG.dart";
 import "./login.dart";
 import "./register.dart";
+import "package:gaskeun_mobile/pages/home/main.dart";
 
 class AuthPage extends StatefulWidget {
   final String title;
-  AuthPage({Key? key, required this.title}) : super(key: key);
+  AuthPage({
+    Key? key, 
+    required this.title,
+  }) : super(key: key);
 
   @override 
   State<AuthPage> createState() => _AuthPage();
@@ -100,11 +104,24 @@ class _AuthPage extends State<AuthPage> {
               ( _authLocation == "login"
                 ? LoginPage(
                     title: "login", 
-                    setAuthLocation: _setAuthLocation,
+                    onSuccessAuth: () {
+                      _onSuccessAuth("Login success", () { // TODO store logged user data!
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(title: "Home", user: 1))
+                        );
+                      });
+                    },
+                    onFailedAuth: _showErrorDialog
                   )
                 : RegisterPage(
                     title: "register", 
-                    setAuthLocation: _setAuthLocation,
+                    onSuccessAuth: () {
+                      _onSuccessAuth("Register success", () {
+                        _setAuthLocation("login");
+                      });
+                    },
+                    onFailedAuth: _showErrorDialog
                   )
               ),
               Row(
@@ -130,6 +147,43 @@ class _AuthPage extends State<AuthPage> {
           )
         )
       ],
+    );
+  }
+
+void _onSuccessAuth(String message, Function callback) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text("Success"),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () { 
+              Navigator.pop(context, 'OK'); 
+              callback();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+}
+
+void _showErrorDialog(String message) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text("Error"),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, 'OK');
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
     );
   }
 }

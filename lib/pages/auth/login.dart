@@ -1,18 +1,17 @@
+import "dart:convert";
 import 'package:flutter/material.dart';
-import "package:gaskeun_mobile/pages/home/main.dart";
-import "../../components/GradientButton.dart";
-
-import "../carOrder/main.dart";
-import "../../models/Car.dart";
-import "../home/main.dart";
+import "package:gaskeun_mobile/api/auth.dart";
+import "package:gaskeun_mobile/components/GradientButton.dart";
 
 class LoginPage extends StatefulWidget {
   final String title;
-  final Function(String) setAuthLocation;
+  final Function onSuccessAuth;
+  final Function(String) onFailedAuth;
 
   LoginPage({Key? key, 
     required this.title,
-    required this.setAuthLocation
+    required this.onSuccessAuth,
+    required this.onFailedAuth
   }) : super(key: key);
 
   @override
@@ -77,19 +76,17 @@ class _LoginPage extends State<LoginPage> {
               return null;
             }
           ),
+          const SizedBox(height: 20),
           GradientButton(
             onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(
-                      title: "Book",
-                      user: 1,
-                    ),
-                  ),
-                );
+              if(_formKey.currentState!.validate()) {
+                final data = jsonEncode(<String, String> {
+                  "email": _fEmail.text,
+                  "password": _fPassword.text
+                });
+                APIAuth().login(data, widget.onSuccessAuth, widget.onFailedAuth);
               }
-            }, 
+            } , 
             text: "Masuk"
           ),
         ]

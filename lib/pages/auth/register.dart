@@ -1,13 +1,17 @@
+import "dart:convert";
 import 'package:flutter/material.dart';
-import "../../components/GradientButton.dart";
+import "package:gaskeun_mobile/api/auth.dart";
+import "package:gaskeun_mobile/components/GradientButton.dart";
 
 class RegisterPage extends StatefulWidget {
   final String title;
-  final Function(String) setAuthLocation;
+  final Function onSuccessAuth;
+  final Function(String) onFailedAuth;
 
   RegisterPage({Key? key, 
     required this.title,
-    required this.setAuthLocation
+    required this.onSuccessAuth,
+    required this.onFailedAuth
   }) : super(key: key);
 
   @override
@@ -121,36 +125,19 @@ class _RegisterPage extends State<RegisterPage> {
           GradientButton(
             onPressed: () {
               if(_formKey.currentState!.validate()) {
-                // toggleRequestCompleted();
-                // showDialog<String>(
-                //   context: context, 
-                //   builder: (BuildContext context) => (
-                //     AlertDialog(
-                //       title: const Text("Please wait"),
-                //       content: const Column(
-                //         children: <Widget>[
-                //           CircularProgressIndicator(),
-                //           Text("Currently processing your data")
-                //         ]
-                //       ),
-                //       actions: <Widget>[
-                //         TextButton(
-                //           onPressed: () {
-                //             toggleRequestCompleted();
-                //             return Navigator.pop(context, "Ok");
-                //           }, 
-                //           child: const Text("Ok")
-                //         )
-                //       ],
-                //     )
-                //   )
-                // );
+                final data = jsonEncode(<String, String> {
+                  "nama": _fFullName.text,
+                  "email": _fEmail.text,
+                  "password": _fPassword.text,
+                  "password_confirmation": _fConfirmPassword.text
+                });
+                APIAuth().register(data, widget.onSuccessAuth, widget.onFailedAuth);
               }
             }, 
             text: "Daftar"
-          ),
+          )
         ]
-      ) ,
+      )
     );
   }
 }
