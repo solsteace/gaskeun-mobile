@@ -76,6 +76,7 @@ class _LoginPage extends State<LoginPage> {
               return null;
             }
           ),
+          const SizedBox(height: 20),
           GradientButton(
             onPressed: () {
               if(_formKey.currentState!.validate()) {
