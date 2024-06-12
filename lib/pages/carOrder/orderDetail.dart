@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import "package:gaskeun_mobile/layouts/pageOnBG.dart";
 import "package:gaskeun_mobile/components/GradientButton.dart";
+import 'package:gaskeun_mobile/components/mapPicker.dart';
 import 'package:file_picker/file_picker.dart';
 import "package:gaskeun_mobile/models/Car.dart";
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart';
 import "./orderSuccess.dart";
 
 class OrderDetailPage extends StatefulWidget {
@@ -18,13 +21,16 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   String? fullName;
   String? email;
-  String? pickupLocation;
-  String? returnLocation;
+  LatLng? pickupLocation;
+  LatLng? returnLocation;
   DateTime? pickupDate;
   DateTime? returnDate;
   String? phone;
   String? emergencyPhone;
   PlatformFile? license;
+
+  TextEditingController pickupLocationController = TextEditingController();
+  TextEditingController returnLocationController = TextEditingController();
 
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -47,6 +53,15 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   }
 
   var _approvedTnC = false;
+
+  Future<String> _getAddressFromLatLng(LatLng location) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
+    if (placemarks.isNotEmpty) {
+      Placemark placemark = placemarks.first;
+      return "${placemark.street}, ${placemark.locality}, ${placemark.administrativeArea}";
+    }
+    return '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,29 +151,85 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             },
                             onSaved: (value) => email = value,
                           ),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Lokasi Pengambilan',
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Masukan Lokasi Pengambilan';
+                          GestureDetector(
+                            onTap: () async {
+                              final selectedLocation = await showDialog<LatLng>(
+                                context: context,
+                                barrierDismissible: false, // Prevents closing the dialog by tapping outside
+                                builder: (context) => Dialog(
+                                  insetPadding: EdgeInsets.all(20),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height * 0.7, // Adjust the height as needed
+                                    child: MapPicker(),
+                                  ),
+                                ),
+                              );
+
+                              // 'pickupLocation' now contains the selected location's LatLng
+                              if (selectedLocation != null) {
+                                String address = await _getAddressFromLatLng(selectedLocation);
+                                setState(() {
+                                  pickupLocation = selectedLocation;
+                                  pickupLocationController.text = address;
+                                });
+                              } else {
+                                setState(() {
+                                  pickupLocation = null;
+                                  pickupLocationController.text = '';
+                                });
                               }
-                              return null;
                             },
-                            onSaved: (value) => pickupLocation = value,
+                            child: AbsorbPointer(
+                              child: TextFormField(
+                                controller: pickupLocationController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Lokasi Pengambilan',
+                                ),
+                              ),
+                            ),
                           ),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Lokasi Pengembalian',
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Masukan Lokasi Pengembalian';
+                          GestureDetector(
+                            onTap: () async {
+                              final selectedLocation = await showDialog<LatLng>(
+                                context: context,
+                                barrierDismissible: false, // Prevents closing the dialog by tapping outside
+                                builder: (context) => Dialog(
+                                  insetPadding: EdgeInsets.all(20),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height * 0.7, // Adjust the height as needed
+                                    child: MapPicker(),
+                                  ),
+                                ),
+                              );
+
+                              // 'returnLocation' now contains the selected location's LatLng
+                              if (selectedLocation != null) {
+                                String address = await _getAddressFromLatLng(selectedLocation);
+                                setState(() {
+                                  returnLocation = selectedLocation;
+                                  returnLocationController.text = address;
+                                });
+                              } else {
+                                setState(() {
+                                  returnLocation = null;
+                                  returnLocationController.text = '';
+                                });
                               }
-                              return null;
                             },
-                            onSaved: (value) => returnLocation = value,
+                            child: AbsorbPointer(
+                              child: TextFormField(
+                                controller: returnLocationController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Lokasi Pengembalian',
+                                ),
+                              ),
+                            ),
                           ),
                           Row(
                             children: [

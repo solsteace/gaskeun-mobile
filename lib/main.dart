@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import "pages/auth/main.dart";
+import "components/carousel.dart";
 
 void main() {
   runApp(const MyApp());
@@ -33,12 +34,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool showCarousel = true;
+
   // TODO: persistent auth
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center( child: AuthPage(title: "nAuthenticated")),
+      body: Center(
+        child: showCarousel
+            ? OnboardingCarousel(
+          onFinish: () {
+            setState(() {
+              showCarousel = false;
+            });
+          },
+        )
+            : AuthPage(title: "Authenticated"),
+      ),
     );
   }
 }

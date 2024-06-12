@@ -28,19 +28,21 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-    flutter:
-        sdk: flutter
-    file_picker: ^8.0.4
-    google_fonts: ^6.2.0
-    http: ^1.2.1
-    google_maps_flutter: ^2.6.1
-    flutter_secure_storage: ^9.2.2
-    shared_preferences: ^2.0.11
+  flutter:
+    sdk: flutter
+  file_picker: ^8.0.4
+  google_fonts: ^6.2.0
+  http: ^1.2.1
+  google_maps_flutter: ^2.6.1
+  geocoding: ^3.0.0
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.0.11
+  carousel_slider: ^4.2.1
 
     # The following adds the Cupertino Icons font to your application.
     # Use with the CupertinoIcons class for iOS style icons.
-    cupertino_icons: ^1.0.6
-    cached_network_image: ^3.1.0
+  cupertino_icons: ^1.0.6
+  cached_network_image: ^3.1.0
 
 dev_dependencies:
     flutter_test:
