@@ -1,20 +1,8 @@
 import 'package:flutter/material.dart';
 import 'GradientButton.dart';
-
 import '../pages/carOrder/main.dart';
 import '../../models/Car.dart';
-
-/*
-cara pemanggilan
-CarCard(
-  carName: 'Toyota Innova Zenix',
-  people: 4,
-  transmission: 'Manual',
-  price: 'Rp 300.000/hari',
-  pathImage: 'car-zenix.png',
-  available: true,
-),
-*/
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CarCard extends StatelessWidget {
   final String carName;
@@ -25,14 +13,14 @@ class CarCard extends StatelessWidget {
   final bool available;
 
   const CarCard({
-    super.key,
+    Key? key,
     required this.carName,
     required this.people,
     required this.transmission,
     required this.price,
     required this.pathImage,
     required this.available,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,17 +41,19 @@ class CarCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Column(
-                          
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 5),
-                            Text(carName, style: TextStyle(fontWeight: FontWeight.bold)),
+                            SizedBox(height: 10),
+                            Text(carName,
+                                style: TextStyle(fontWeight: FontWeight.bold)),
                             SizedBox(height: 6),
                             Row(
                               children: [
                                 Icon(Icons.person),
                                 SizedBox(width: 5),
-                                Text('$people orang', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('$people orang',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
                               ],
                             ),
                             SizedBox(height: 6),
@@ -71,7 +61,9 @@ class CarCard extends StatelessWidget {
                               children: [
                                 Icon(Icons.settings),
                                 SizedBox(width: 5),
-                                Text(transmission, style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text(transmission,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
                               ],
                             ),
                             SizedBox(height: 6),
@@ -80,11 +72,26 @@ class CarCard extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 5),
-                      Image.asset(
-                        'assets/img/$pathImage',
-                        height: 110,
-                        width: 150,
-                        fit: BoxFit.cover,
+                      Column(
+                        children: [
+                          SizedBox(
+                              height: 14), // Tambahkan jarak di atas gambar
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                10), // Sesuaikan dengan kebutuhan Anda
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://gaskeun.shop/storage/$pathImage',
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                              height: 96,
+                              width: 145,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -92,28 +99,32 @@ class CarCard extends StatelessWidget {
                   Align(
                     alignment: Alignment.center,
                     child: GradientButton(
-                      onPressed: available ? () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => CarOrderPage(
-                              car: Car(
-                                id: 1,
-                                providerId: 1,
-                                carImageId: 1,
-                                capacity: 4,
-                                price: 300000,
-                                brand: "Toyota",
-                                model: "Innova Zenix",
-                                description: "Deskripsi",
-                                status: available ? "Tersedia" : "Tidak tersedia",
-                                plateNumber: "E 13 JIR",
-                                transmission: "Manual",
-                                fuel: "Bensin",
-                              ),
-                            ),
-                          ),
-                        );
-                      } : null,
+                      onPressed: available
+                          ? () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => CarOrderPage(
+                                    car: Car(
+                                      id: 1,
+                                      providerId: 1,
+                                      carImageId: 1,
+                                      capacity: people,
+                                      price: 300000,
+                                      brand: carName,
+                                      model: "Innova Zenix",
+                                      description: "Deskripsi",
+                                      status: available
+                                          ? "Tersedia"
+                                          : "Tidak tersedia",
+                                      plateNumber: "E 13 JIR",
+                                      transmission: transmission,
+                                      fuel: "Bensin",
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          : null,
                       text: "Pesan",
                     ),
                   ),
@@ -122,45 +133,50 @@ class CarCard extends StatelessWidget {
             ),
           ),
           if (!available)
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.6),
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(17), 
-                  bottomRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10), 
-                  topLeft: Radius.circular(17), 
+            Positioned(
+              top: 5,
+              left: 3,
+              right: 3, // Atur sesuai kebutuhan Anda
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.7),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(15),
+                    bottomRight: Radius.circular(15),
+                    bottomLeft: Radius.circular(15),
+                    topLeft: Radius.circular(15),
+                  ),
+                  shape: BoxShape.rectangle,
                 ),
-                shape: BoxShape.rectangle,
-              ),
-              height: 200,
-              child: Center(
-                child: Text(
-                  'Tidak tersedia',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                height: 188,
+                child: Center(
+                  child: Text(
+                    'Tidak Tersedia',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
             ),
           Positioned(
-            top: -2,
-            left: 2,
-            right: 2,
+            top: 0,
+            left: 3,
+            right: 3,
             child: Container(
               decoration: BoxDecoration(
                 color: available ? Colors.green : Colors.red,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(17),
-                  topRight: Radius.circular(17),
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
                 ),
               ),
               padding: EdgeInsets.symmetric(vertical: 3),
               child: Center(
                 child: Text(
-                  available ? "Tersedia" : "Tidak tersedia",
+                  available ? "Tersedia" : "Tidak Tersedia",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
