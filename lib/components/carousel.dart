@@ -27,15 +27,16 @@ class _OnboardingCarouselState extends State<OnboardingCarousel> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(imagePath, height: 200),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           Text(
             heading,
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
+          const SizedBox(height: 10),
           Text(
             description,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
             textAlign: TextAlign.center,
           ),
         ],
