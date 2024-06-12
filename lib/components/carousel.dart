@@ -15,23 +15,31 @@ class _OnboardingCarouselState extends State<OnboardingCarousel> {
   int _current = 0;
 
   final List<Widget> _slides = [
-    _buildSlide('assets/images/slide1.png', 'Discover your dream car.'),
-    _buildSlide('assets/images/slide2.png', 'Enjoy a safe and guaranteed rental process.'),
-    _buildSlide('assets/images/slide3.png', 'Get the best support from our customer service team.'),
+    _buildSlide("assets/img/img-onBoardingLogo.png", "Wilujeng Sumping", "Gaskeun adalah aplikasi yang memudahkan Anda menyewa mobil di Bandung yang sesuai dengan kebutuhan Anda."),
+    _buildSlide("assets/img/img-onBoardingKey.png", "Temukan Mobil Impian", "Nikmati proses sewa yang aman dan terjamin, temukan pilihan mobil sesuai, dan dapatkan dukungan terbaik dari kami."),
+    _buildSlide("assets/img/img-onBoardingCar.png", "Mulai Kelilingi Bandung", "Solusi sewa mobil terbaik untuk kebutuhan Anda dan nikmati kemudahan sewa mobil dengan pelayanan terbaik dari kami."),
   ];
 
-  static Widget _buildSlide(String imagePath, String text) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(imagePath, height: 200),
-        const SizedBox(height: 20),
-        Text(
-          text,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-      ],
+  static Widget _buildSlide(String imagePath, String heading, String description) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(imagePath, height: 200),
+          const SizedBox(height: 10),
+          Text(
+            heading,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            description,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 
@@ -39,7 +47,7 @@ class _OnboardingCarouselState extends State<OnboardingCarousel> {
   void initState() {
     super.initState();
     // Automatically move to the next slide
-    Future.delayed(Duration(seconds: 3), _autoSlide);
+    Future.delayed(Duration(seconds: 15), _autoSlide);
   }
 
   void _autoSlide() {
@@ -48,7 +56,7 @@ class _OnboardingCarouselState extends State<OnboardingCarousel> {
     } else {
       widget.onFinish();
     }
-    Future.delayed(Duration(seconds: 3), _autoSlide);
+    Future.delayed(Duration(seconds: 15), _autoSlide);
   }
 
   @override
@@ -65,7 +73,8 @@ class _OnboardingCarouselState extends State<OnboardingCarousel> {
                 options: CarouselOptions(
                   height: 400,
                   autoPlay: false,
-                  enlargeCenterPage: true,
+                  enlargeCenterPage: false,  // Disable enlarging center page
+                  viewportFraction: 1.0,    // Ensure each slide takes up the full viewport
                   onPageChanged: (index, reason) {
                     setState(() {
                       _current = index;
