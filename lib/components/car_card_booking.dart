@@ -22,7 +22,7 @@ class CarCardBooking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(3),
+      padding: const EdgeInsets.all(5),
       child: Card(
         elevation: 11,
         color: Colors.white,
@@ -30,7 +30,7 @@ class CarCardBooking extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
