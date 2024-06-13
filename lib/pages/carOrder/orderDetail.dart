@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import "package:gaskeun_mobile/layouts/pageOnBG.dart";
-import "package:gaskeun_mobile/components/GradientButton.dart";
+import 'package:gaskeun_mobile/layouts/pageOnBG.dart';
+import 'package:gaskeun_mobile/components/GradientButton.dart';
 import 'package:gaskeun_mobile/components/mapPicker.dart';
 import 'package:file_picker/file_picker.dart';
-import "package:gaskeun_mobile/models/Car.dart";
+import 'package:gaskeun_mobile/models/Car.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
-import "./orderSuccess.dart";
+import 'package:gaskeun_mobile/api/api_create_pesanan.dart';
+import './orderSuccess.dart';
 
 class OrderDetailPage extends StatefulWidget {
   final Car car;
@@ -55,12 +56,59 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   var _approvedTnC = false;
 
   Future<String> _getAddressFromLatLng(LatLng location) async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(location.latitude, location.longitude);
     if (placemarks.isNotEmpty) {
       Placemark placemark = placemarks.first;
       return "${placemark.street}, ${placemark.locality}, ${placemark.administrativeArea}";
     }
     return '';
+  }
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      try {
+        final paymentId = await ApiService.createPayment();
+        final orderId = await ApiService.createOrder(
+          22, // Replace with the actual id_pemesan
+          widget.car.id,
+          paymentId!,
+          fullName!,
+          pickupDate!.toIso8601String(),
+          returnDate!.toIso8601String(),
+          license!.path!,
+          titikAntar: pickupLocationController.text,
+          titikJemput: returnLocationController.text,
+        );
+
+        // Navigate to success page
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OrderSuccessPage(),
+          ),
+        );
+      } catch (error) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text(error.toString()),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
   }
 
   @override
@@ -155,14 +203,16 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             onTap: () async {
                               final selectedLocation = await showDialog<LatLng>(
                                 context: context,
-                                barrierDismissible: false, // Prevents closing the dialog by tapping outside
+                                barrierDismissible:
+                                    false, // Prevents closing the dialog by tapping outside
                                 builder: (context) => Dialog(
                                   insetPadding: EdgeInsets.all(20),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Container(
-                                    height: MediaQuery.of(context).size.height * 0.7, // Adjust the height as needed
+                                    height: MediaQuery.of(context).size.height *
+                                        0.7, // Adjust the height as needed
                                     child: MapPicker(),
                                   ),
                                 ),
@@ -170,7 +220,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
                               // 'pickupLocation' now contains the selected location's LatLng
                               if (selectedLocation != null) {
-                                String address = await _getAddressFromLatLng(selectedLocation);
+                                String address = await _getAddressFromLatLng(
+                                    selectedLocation);
                                 setState(() {
                                   pickupLocation = selectedLocation;
                                   pickupLocationController.text = address;
@@ -195,14 +246,16 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             onTap: () async {
                               final selectedLocation = await showDialog<LatLng>(
                                 context: context,
-                                barrierDismissible: false, // Prevents closing the dialog by tapping outside
+                                barrierDismissible:
+                                    false, // Prevents closing the dialog by tapping outside
                                 builder: (context) => Dialog(
                                   insetPadding: EdgeInsets.all(20),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Container(
-                                    height: MediaQuery.of(context).size.height * 0.7, // Adjust the height as needed
+                                    height: MediaQuery.of(context).size.height *
+                                        0.7, // Adjust the height as needed
                                     child: MapPicker(),
                                   ),
                                 ),
@@ -210,7 +263,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
                               // 'returnLocation' now contains the selected location's LatLng
                               if (selectedLocation != null) {
-                                String address = await _getAddressFromLatLng(selectedLocation);
+                                String address = await _getAddressFromLatLng(
+                                    selectedLocation);
                                 setState(() {
                                   returnLocation = selectedLocation;
                                   returnLocationController.text = address;
@@ -380,15 +434,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             onPressed: (!_approvedTnC
                                 ? null
                                 : () {
-                                    if (_formKey.currentState!.validate()) {
-                                      _formKey.currentState!.save();
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => OrderSuccessPage(),
-                                        ),
-                                      );
-                                    }
+                                    _submitForm();
                                   }),
                             text: 'Konfirmasi Pemesanan',
                           ),

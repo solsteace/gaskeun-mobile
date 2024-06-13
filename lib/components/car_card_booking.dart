@@ -100,6 +100,7 @@ class CarCardBooking extends StatelessWidget {
                     : ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
+                          disabledBackgroundColor: Colors.red,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -110,7 +111,7 @@ class CarCardBooking extends StatelessWidget {
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-              ),
+              )
             ],
           ),
         ),
