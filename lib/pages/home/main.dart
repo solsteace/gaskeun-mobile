@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:gaskeun_mobile/pages/home/myCarPage.dart';
+import 'package:gaskeun_mobile/pages/home/bookingPage.dart';
 import "../profilePage/main.dart";
 import "indexPage.dart";
 
@@ -33,9 +34,7 @@ class _HomePage extends State<HomePage> {
           children: [
             IndexPage(token: "19|8w0h3sPxMBWn97bDpyu4VgrBOrk7CG6bza8T5Vriac06120b"),
             CarPage(),
-            Center(
-              child: Text('Email page', style: TextStyle(fontSize: 30)),
-            ),
+            BookingPage(),
             ProfilePage(
                 token: "19|8w0h3sPxMBWn97bDpyu4VgrBOrk7CG6bza8T5Vriac06120b")
           ],
