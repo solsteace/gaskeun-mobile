@@ -150,6 +150,7 @@ class CarCard extends StatelessWidget {
                                       plateNumber: plateNumber,
                                       transmission: transmission,
                                       fuel: fuel,
+                                      imagePath: pathImage,
                                     ),
                                   ),
                                 ),

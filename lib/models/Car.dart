@@ -11,7 +11,8 @@ class Car {
   final String plateNumber;
   final String transmission;
   final String fuel;
-  
+  final String imagePath;
+
   Car({
     required this.id,
     required this.providerId,
@@ -25,5 +26,6 @@ class Car {
     required this.plateNumber,
     required this.transmission,
     required this.fuel,
+    required this.imagePath,
   });
 }
