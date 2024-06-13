@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
-import "package:gaskeun_mobile/layouts/pageOnBG.dart";
+import 'dart:async';
+import 'package:gaskeun_mobile/layouts/pageOnBG.dart';
 import '../../components/car_card_booking.dart';
+import 'package:gaskeun_mobile/models/Pesanan.dart'; // Import model Order
+import 'package:gaskeun_mobile/api/api_history.dart'; // Import service untuk fetch orders
 
-class BookingPage extends StatelessWidget {
+class BookingPage extends StatefulWidget {
   const BookingPage({super.key});
+
+  @override
+  _BookingPageState createState() => _BookingPageState();
+}
+
+class _BookingPageState extends State<BookingPage> {
+  late Future<List<Order>> futureOrders;
+
+  @override
+  void initState() {
+    super.initState();
+    futureOrders = fetchOrders(10); // Ganti dengan userId yang sesuai
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,24 +32,23 @@ class BookingPage extends StatelessWidget {
               vertical: 30,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: [
-                    const SizedBox(width: 16),
-                    const Text(
-                      'Pesanan\nSaya',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      const SizedBox(width: 16),
+                      const Text(
+                        'Pesanan\nSaya',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
-                )
-              ]
-            ),
+                    ],
+                  )
+                ]),
           ),
           Expanded(
             child: Container(
@@ -51,29 +66,34 @@ class BookingPage extends StatelessWidget {
                 bottom: 10,
               ),
               width: double.infinity,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    CarCardBooking(
-                      carName: "Brio",
-                      price: 'Rp 400.000',
-                      pickUpDate: "YYYY/MM/DD",
-                      returnDate: "YYYY/MM/DD",
-                      pathImage: "car-brio.png",
-                      lunas: false,
-                    ),
-                    CarCardBooking(
-                      carName: "Sigra",
-                      price: 'Rp 300.000',
-                      pickUpDate: "YYYY/MM/DD",
-                      returnDate: "YYYY/MM/DD",
-                      pathImage: "car-sigra.png",
-                      lunas: true,
-                    ),
-                    // Add more CarCardBooking widgets if needed
-                  ],
-                ),
+              child: FutureBuilder<List<Order>>(
+                future: futureOrders,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Order>? orders = snapshot.data;
+                    return SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: orders!
+                            .map((order) => CarCardBooking(
+                                  carName: order.carName,
+                                  price: 'Rp ${order.price}',
+                                  pickUpDate: order.pickUpDate,
+                                  returnDate: order.returnDate,
+                                  pathImage: order.imagePath,
+                                  lunas: order.lunas,
+                                ))
+                            .toList(),
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("${snapshot.error}"));
+                  }
+                  // By default, show a loading spinner.
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
             ),
           ),

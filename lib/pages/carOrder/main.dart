@@ -32,7 +32,7 @@ class _carOrderPage extends State<CarOrderPage> {
               borderRadius: BorderRadius.circular(10), // Atur radius di sini
               child: SizedBox(
                 width: 350, // Atur lebar di sini
-                // height: 200.0, // Atur tinggi di sini
+                height: 200.0, // Atur tinggi di sini
                 child: Image.network(
                   'https://gaskeun.shop/storage/${widget.car.imagePath}',
                   loadingBuilder: (context, child, loadingProgress) {
