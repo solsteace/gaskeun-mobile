@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:gaskeun_mobile/pages/home/myCarPage.dart';
 import 'package:gaskeun_mobile/pages/home/bookingPage.dart';
 import "../profilePage/main.dart";
+import "indexPage.dart";
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -31,10 +32,7 @@ class _HomePage extends State<HomePage> {
             });
           },
           children: [
-            Center(
-                child: InkWell(
-              child: Text('Go to Home page', style: TextStyle(fontSize: 30)),
-            )),
+            IndexPage(token: "19|8w0h3sPxMBWn97bDpyu4VgrBOrk7CG6bza8T5Vriac06120b"),
             CarPage(),
             BookingPage(),
             ProfilePage(
@@ -45,7 +43,7 @@ class _HomePage extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedItemColor: const Color(0xFF0117FF),
+        selectedItemColor: const Color(0xFF5D5BFF),
         unselectedItemColor: Colors.grey,
         currentIndex: openedMenu,
         onTap: (index) {
@@ -61,22 +59,23 @@ class _HomePage extends State<HomePage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_filled),
-            label: 'Home',
+            label: 'Beranda',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book),
-            label: 'Book',
+            label: 'Mobil Kami',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.table_rows),
-            label: 'My Bookings',
+            label: 'Pesanan',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Profile',
+            label: 'Profil',
           ),
         ],
       ),
     );
   }
 }
+
