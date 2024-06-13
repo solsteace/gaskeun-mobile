@@ -2,24 +2,37 @@ import 'package:flutter/material.dart';
 import 'GradientButton.dart';
 import '../pages/carOrder/main.dart';
 import '../../models/Car.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class CarCard extends StatelessWidget {
-  final String carName;
+  final int id;
+  final int providerId;
+  final int carImageId;
+  final String brand;
+  final String model;
   final int people;
-  final String transmission;
-  final String price;
-  final String pathImage;
+  final int price;
+  final String description;
   final bool available;
+  final String plateNumber;
+  final String transmission;
+  final String fuel;
+  final String pathImage;
 
   const CarCard({
     Key? key,
-    required this.carName,
+    required this.id,
+    required this.providerId,
+    required this.carImageId,
+    required this.brand,
+    required this.model,
     required this.people,
-    required this.transmission,
     required this.price,
-    required this.pathImage,
+    required this.description,
     required this.available,
+    required this.plateNumber,
+    required this.transmission,
+    required this.fuel,
+    required this.pathImage,
   }) : super(key: key);
 
   @override
@@ -44,16 +57,19 @@ class CarCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 10),
-                            Text(carName,
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            Text(
+                              brand + " " + model,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                             SizedBox(height: 6),
                             Row(
                               children: [
                                 Icon(Icons.person),
                                 SizedBox(width: 5),
-                                Text('$people orang',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
+                                Text(
+                                  '$people orang',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
                             SizedBox(height: 6),
@@ -61,13 +77,14 @@ class CarCard extends StatelessWidget {
                               children: [
                                 Icon(Icons.settings),
                                 SizedBox(width: 5),
-                                Text(transmission,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
+                                Text(
+                                  transmission,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
                             SizedBox(height: 6),
-                            Text(price),
+                            Text('Rp. $price/hari'),
                           ],
                         ),
                       ),
@@ -79,16 +96,30 @@ class CarCard extends StatelessWidget {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(
                                 10), // Sesuaikan dengan kebutuhan Anda
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  'https://gaskeun.shop/storage/$pathImage',
-                              placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                            child: Image.network(
+                              'https://gaskeun.shop/storage/$pathImage',
                               height: 96,
                               width: 145,
                               fit: BoxFit.cover,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Icon(Icons.error),
                             ),
                           ),
                         ],
@@ -105,20 +136,20 @@ class CarCard extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder: (context) => CarOrderPage(
                                     car: Car(
-                                      id: 1,
-                                      providerId: 1,
-                                      carImageId: 1,
+                                      id: id,
+                                      providerId: providerId,
+                                      carImageId: carImageId,
                                       capacity: people,
-                                      price: 300000,
-                                      brand: carName,
-                                      model: "Innova Zenix",
-                                      description: "Deskripsi",
+                                      price: price,
+                                      brand: brand,
+                                      model: model,
+                                      description: description,
                                       status: available
                                           ? "Tersedia"
                                           : "Tidak tersedia",
-                                      plateNumber: "E 13 JIR",
+                                      plateNumber: plateNumber,
                                       transmission: transmission,
-                                      fuel: "Bensin",
+                                      fuel: fuel,
                                     ),
                                   ),
                                 ),

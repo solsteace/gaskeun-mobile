@@ -85,10 +85,17 @@ class _CarPageState extends State<CarPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: cars
                             .map((car) => CarCard(
-                                  carName: '${car.brand} ${car.model}',
+                                  id: car.id,
+                                  providerId: car.idPengguna,
+                                  carImageId: car.idImage,
+                                  brand: car.brand,
+                                  model: car.model,
                                   people: car.kapasitas,
+                                  price: car.hargaSewa,
+                                  description: car.deskripsi,
+                                  plateNumber: car.nomorPolisi,
+                                  fuel: car.bahanBakar,
                                   transmission: car.transmisi,
-                                  price: 'Rp ${car.hargaSewa}/hari',
                                   pathImage: car.image.path,
                                   available: car.status == 'tersedia',
                                 ))
