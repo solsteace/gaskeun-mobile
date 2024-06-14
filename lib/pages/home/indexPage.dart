@@ -9,6 +9,7 @@ import 'filterPage.dart';
 import 'package:gaskeun_mobile/models/CarList.dart';
 import '../../api/api_service.dart';
 import 'package:gaskeun_mobile/api/api_mobil.dart' as apiMobil;
+import "./filterResult.dart";
 
 String getGreetingMessage() {
   var hour = DateTime.now().hour;
@@ -46,7 +47,8 @@ class _IndexPageState extends State<IndexPage> {
   double _maxPrice = 1000000;
   final _minPriceController = TextEditingController();
   final _maxPriceController = TextEditingController();
-  final _indonesianCurrencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: '', decimalDigits: 0);
+  final _indonesianCurrencyFormat =
+      NumberFormat.currency(locale: 'id_ID', symbol: '', decimalDigits: 0);
 
   @override
   void initState() {
@@ -59,7 +61,8 @@ class _IndexPageState extends State<IndexPage> {
 
   Future<void> _fetchUserProfile() async {
     try {
-      Map<String, dynamic> userProfile = await _apiService.fetchUserProfile(widget.token);
+      Map<String, dynamic> userProfile =
+          await _apiService.fetchUserProfile(widget.token);
       setState(() {
         _user = User.fromJson(userProfile);
       });
@@ -80,10 +83,12 @@ class _IndexPageState extends State<IndexPage> {
       setState(() {
         if (isPickup) {
           _pickupDate = picked;
-          _pickupDateController.text = DateFormat('dd-MM-yyyy').format(_pickupDate!);
+          _pickupDateController.text =
+              DateFormat('dd-MM-yyyy').format(_pickupDate!);
         } else {
           _returnDate = picked;
-          _returnDateController.text = DateFormat('dd-MM-yyyy').format(_returnDate!);
+          _returnDateController.text =
+              DateFormat('dd-MM-yyyy').format(_returnDate!);
         }
       });
     }
@@ -130,7 +135,8 @@ class _IndexPageState extends State<IndexPage> {
             bottom: 0,
             left: 0,
             right: 0,
-            height: MediaQuery.of(context).size.height * 0.72, // 50% of screen height
+            height: MediaQuery.of(context).size.height *
+                0.72, // 50% of screen height
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -174,7 +180,8 @@ class _IndexPageState extends State<IndexPage> {
                     return Center(child: Text('No cars available'));
                   } else {
                     List<Car> cars = snapshot.data!;
-                    cars = cars.where((car) => car.status == 'tersedia').toList();
+                    cars =
+                        cars.where((car) => car.status == 'tersedia').toList();
                     return ListView.builder(
                       itemCount: cars.length,
                       itemBuilder: (context, index) {
@@ -226,9 +233,7 @@ class _IndexPageState extends State<IndexPage> {
                   SizedBox(height: 5),
                   Text('Tanggal Rental',
                       style:
-                      TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16)),
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                   SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -238,7 +243,7 @@ class _IndexPageState extends State<IndexPage> {
                           onTap: () => _selectDate(context, true),
                           child: AbsorbPointer(
                             child: SizedBox(
-                              height: 40,  // Explicitly set the height
+                              height: 40, // Explicitly set the height
                               child: TextField(
                                 controller: _pickupDateController,
                                 decoration: InputDecoration(
@@ -246,8 +251,10 @@ class _IndexPageState extends State<IndexPage> {
                                   labelStyle: TextStyle(fontSize: 14),
                                   hintText: _pickupDate == null
                                       ? 'Pilih Tanggal'
-                                      : DateFormat('yyyy-MM-dd').format(_pickupDate!),
-                                  suffixIcon: Icon(Icons.calendar_today, size: 16),
+                                      : DateFormat('yyyy-MM-dd')
+                                          .format(_pickupDate!),
+                                  suffixIcon:
+                                      Icon(Icons.calendar_today, size: 16),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
@@ -255,7 +262,7 @@ class _IndexPageState extends State<IndexPage> {
                                     vertical: 4.0,
                                     horizontal: 8.0,
                                   ),
-                                  isDense: true,  // Make the TextField compact
+                                  isDense: true, // Make the TextField compact
                                 ),
                                 style: TextStyle(fontSize: 14),
                               ),
@@ -269,7 +276,7 @@ class _IndexPageState extends State<IndexPage> {
                           onTap: () => _selectDate(context, false),
                           child: AbsorbPointer(
                             child: SizedBox(
-                              height: 40,  // Explicitly set the height
+                              height: 40, // Explicitly set the height
                               child: TextField(
                                 controller: _returnDateController,
                                 decoration: InputDecoration(
@@ -277,8 +284,10 @@ class _IndexPageState extends State<IndexPage> {
                                   labelStyle: TextStyle(fontSize: 14),
                                   hintText: _returnDate == null
                                       ? 'Pilih Tanggal'
-                                      : DateFormat('yyyy-MM-dd').format(_returnDate!),
-                                  suffixIcon: Icon(Icons.calendar_today, size: 16),
+                                      : DateFormat('yyyy-MM-dd')
+                                          .format(_returnDate!),
+                                  suffixIcon:
+                                      Icon(Icons.calendar_today, size: 16),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
@@ -286,7 +295,7 @@ class _IndexPageState extends State<IndexPage> {
                                     vertical: 4.0,
                                     horizontal: 8.0,
                                   ),
-                                  isDense: true,  // Make the TextField compact
+                                  isDense: true, // Make the TextField compact
                                 ),
                                 style: TextStyle(fontSize: 14),
                               ),
@@ -340,13 +349,15 @@ class _IndexPageState extends State<IndexPage> {
                     children: [
                       Expanded(
                         child: SizedBox(
-                          height: 40,  // Explicitly set the height
+                          height: 40, // Explicitly set the height
                           child: TextField(
                             controller: _minPriceController,
                             decoration: InputDecoration(
                               labelText: 'Rp',
                               border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0), // Adjust padding
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 8.0,
+                                  horizontal: 12.0), // Adjust padding
                             ),
                             keyboardType: TextInputType.number,
                             inputFormatters: [
@@ -364,13 +375,15 @@ class _IndexPageState extends State<IndexPage> {
                       SizedBox(width: 10),
                       Expanded(
                         child: SizedBox(
-                          height: 40,  // Explicitly set the height
+                          height: 40, // Explicitly set the height
                           child: TextField(
                             controller: _maxPriceController,
                             decoration: InputDecoration(
                               labelText: 'Rp',
                               border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0), // Adjust padding
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 8.0,
+                                  horizontal: 12.0), // Adjust padding
                             ),
                             keyboardType: TextInputType.number,
                             inputFormatters: [
