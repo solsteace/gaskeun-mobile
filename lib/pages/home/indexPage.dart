@@ -433,6 +433,20 @@ class _IndexPageState extends State<IndexPage> {
                           maxPrice: int.parse(_maxPriceController.text.replaceAll('.', '')),
                         );
                       });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FilterResultPage(
+                            pickupDate: formattedPickupDate.toString(),
+                            returnDate: formattedReturnDate.toString(),
+                            minPrice: int.parse(_minPriceController.text.replaceAll('.', '')),
+                            maxPrice: int.parse(_maxPriceController.text.replaceAll('.', '')),
+                            numPassengers: 9 - 8,
+                            brand: '',
+                            transmission: '',
+                          ),
+                        ),
+                      );
                     },
                     text: 'Cari Mobil',
                   ),
