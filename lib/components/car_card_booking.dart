@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import "../components/GradientButton.dart";
+import 'package:gaskeun_mobile/pages/home/main.dart';
 
 class CarCardBooking extends StatelessWidget {
   final String carName;
@@ -19,8 +20,10 @@ class CarCardBooking extends StatelessWidget {
     required this.lunas,
   });
 
+
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.all(5),
       child: Card(
@@ -93,7 +96,13 @@ class CarCardBooking extends StatelessWidget {
                 child: lunas
                     ? GradientButton(
                         onPressed: () {
-                          // Your button action here
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  HomePage(title: "My Bookings", user: 1, index: 1),
+                            ),
+                            (Route<dynamic> route) => false,
+                          );
                         },
                         text: "Pesan Lagi",
                       )
@@ -111,7 +120,7 @@ class CarCardBooking extends StatelessWidget {
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-              )
+              ),
             ],
           ),
         ),
