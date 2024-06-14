@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'GradientButton.dart';
 import '../pages/carOrder/main.dart';
 import '../../models/Car.dart';
+import "package:gaskeun_mobile/models/Profile.dart";
 
 class CarCard extends StatelessWidget {
   final int id;
@@ -17,6 +18,7 @@ class CarCard extends StatelessWidget {
   final String transmission;
   final String fuel;
   final String pathImage;
+  final User orderingUser;
 
   const CarCard({
     Key? key,
@@ -33,6 +35,7 @@ class CarCard extends StatelessWidget {
     required this.transmission,
     required this.fuel,
     required this.pathImage,
+    required this.orderingUser,
   }) : super(key: key);
 
   @override
@@ -135,6 +138,7 @@ class CarCard extends StatelessWidget {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => CarOrderPage(
+                                    user: orderingUser,
                                     car: Car(
                                       id: id,
                                       providerId: providerId,

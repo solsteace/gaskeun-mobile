@@ -3,6 +3,7 @@ import "package:gaskeun_mobile/layouts/pageOnBG.dart";
 import '../../components/car_card.dart';
 
 import 'package:gaskeun_mobile/models/CarList.dart';
+import 'package:gaskeun_mobile/models/Profile.dart';
 
 import 'package:gaskeun_mobile/api/api_mobil.dart';
 
@@ -14,6 +15,7 @@ class FilterResultPage extends StatefulWidget {
   final int numPassengers;
   final String brand;
   final String transmission;
+  final User loggedUser;
 
   const FilterResultPage({
     Key? key,
@@ -24,6 +26,7 @@ class FilterResultPage extends StatefulWidget {
     required this.numPassengers,
     required this.brand,
     required this.transmission,
+    required this.loggedUser
   }) : super(key: key);
 
   @override
@@ -123,6 +126,7 @@ class _FilterResultState extends State<FilterResultPage> {
                                   transmission: car.transmisi,
                                   pathImage: car.image.path,
                                   available: car.status == 'tersedia',
+                                  orderingUser: widget.loggedUser,
                                 ))
                             .toList(),
                       ),

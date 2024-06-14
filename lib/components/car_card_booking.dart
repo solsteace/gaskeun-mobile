@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "../components/GradientButton.dart";
 import 'package:gaskeun_mobile/pages/home/main.dart';
+import "package:gaskeun_mobile/models/Profile.dart";
 
 class CarCardBooking extends StatelessWidget {
   final String carName;
@@ -10,6 +11,7 @@ class CarCardBooking extends StatelessWidget {
   final String pathImage;
   final bool lunas;
   final String status;
+  final User orderingUser;
 
   const CarCardBooking({
     super.key,
@@ -20,6 +22,7 @@ class CarCardBooking extends StatelessWidget {
     required this.pathImage,
     required this.lunas,
     required this.status,
+    required this.orderingUser
   });
 
   @override
@@ -137,7 +140,7 @@ class CarCardBooking extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder: (context) => HomePage(
                                       title: "My Bookings",
-                                      user: 1,
+                                      user: orderingUser,
                                       index: 1),
                                 ),
                                 (Route<dynamic> route) => false,

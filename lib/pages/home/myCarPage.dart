@@ -3,11 +3,17 @@ import "package:gaskeun_mobile/layouts/pageOnBG.dart";
 import '../../components/car_card.dart';
 
 import 'package:gaskeun_mobile/models/CarList.dart';
+import 'package:gaskeun_mobile/models/Profile.dart';
 
 import 'package:gaskeun_mobile/api/api_mobil.dart';
 
 class CarPage extends StatefulWidget {
-  const CarPage({Key? key}) : super(key: key);
+  final User loggedUser;
+  const CarPage({
+    Key? key,
+    required this.loggedUser
+  }) : super(key: key);
+  
 
   @override
   _CarPageState createState() => _CarPageState();
@@ -98,6 +104,7 @@ class _CarPageState extends State<CarPage> {
                                   transmission: car.transmisi,
                                   pathImage: car.image.path,
                                   available: car.status == 'tersedia',
+                                  orderingUser: widget.loggedUser,
                                 ))
                             .toList(),
                       ),

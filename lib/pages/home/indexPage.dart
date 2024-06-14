@@ -6,6 +6,7 @@ import "package:gaskeun_mobile/components/GradientButton.dart";
 import '../../components/car_card.dart';
 import '../../models/Profile.dart';
 import 'package:gaskeun_mobile/models/CarList.dart';
+import 'package:gaskeun_mobile/models/Profile.dart';
 import '../../api/api_service.dart';
 import 'package:gaskeun_mobile/api/api_mobil.dart' as apiMobil;
 
@@ -24,9 +25,9 @@ String getGreetingMessage() {
 }
 
 class IndexPage extends StatefulWidget {
-  final String token;
+  final User loggedUser;
 
-  const IndexPage({Key? key, required this.token}) : super(key: key);
+  const IndexPage({Key? key, required this.loggedUser}) : super(key: key);
 
   @override
   _IndexPageState createState() => _IndexPageState();
@@ -58,7 +59,7 @@ class _IndexPageState extends State<IndexPage> {
 
   Future<void> _fetchUserProfile() async {
     try {
-      Map<String, dynamic> userProfile = await _apiService.fetchUserProfile(widget.token);
+      Map<String, dynamic> userProfile = await _apiService.fetchUserProfile(widget.loggedUser.token);
       setState(() {
         _user = User.fromJson(userProfile);
       });
@@ -198,6 +199,7 @@ class _IndexPageState extends State<IndexPage> {
                           transmission: car.transmisi,
                           pathImage: car.image.path,
                           available: car.status == 'tersedia',
+                          orderingUser: widget.loggedUser,
                         );
                       },
                     );

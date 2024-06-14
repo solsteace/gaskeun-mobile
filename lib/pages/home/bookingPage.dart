@@ -3,10 +3,15 @@ import 'dart:async';
 import 'package:gaskeun_mobile/layouts/pageOnBG.dart';
 import '../../components/car_card_booking.dart';
 import 'package:gaskeun_mobile/models/Pesanan.dart'; // Import model Order
+import 'package:gaskeun_mobile/models/Profile.dart'; // Import model User
 import 'package:gaskeun_mobile/api/api_history.dart'; // Import service untuk fetch orders
 
 class BookingPage extends StatefulWidget {
-  const BookingPage({super.key});
+  final User loggedUser;
+  const BookingPage({
+    super.key,
+    required this.loggedUser
+  });
 
   @override
   _BookingPageState createState() => _BookingPageState();
@@ -18,7 +23,7 @@ class _BookingPageState extends State<BookingPage> {
   @override
   void initState() {
     super.initState();
-    futureOrders = fetchOrders(22); // Ganti dengan userId yang sesuai
+    futureOrders = fetchOrders(widget.loggedUser.id); // Ganti dengan userId yang sesuai
   }
 
   @override
@@ -83,6 +88,7 @@ class _BookingPageState extends State<BookingPage> {
                                   pathImage: order.imagePath,
                                   lunas: order.lunas,
                                   status: "belum selesai",
+                                  orderingUser: widget.loggedUser,
                                 ))
                             .toList(),
                       ),

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import "package:gaskeun_mobile/components/GradientButton.dart";
 import 'package:gaskeun_mobile/pages/home/main.dart';
+import "package:gaskeun_mobile/models/Profile.dart";
 
 class OrderSuccessPage extends StatelessWidget {
+  final User loggedUser;
+
+  OrderSuccessPage({ required this.loggedUser, });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +52,7 @@ class OrderSuccessPage extends StatelessWidget {
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                           builder: (context) =>
-                              HomePage(title: "My Bookings", user: 1, index: 2),
+                              HomePage(title: "My Bookings", user: loggedUser, index: 2),
                         ),
                         (Route<dynamic> route) => false,
                       );

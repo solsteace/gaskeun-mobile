@@ -3,11 +3,17 @@ import "package:flutter/widgets.dart";
 import "package:gaskeun_mobile/components/GradientButton.dart";
 import "package:gaskeun_mobile/layouts/pageWithAppBar.dart";
 import "package:gaskeun_mobile/models/Car.dart";
+import "package:gaskeun_mobile/models/Profile.dart";
 import "./orderDetail.dart";
 
 class CarOrderPage extends StatefulWidget {
   final Car car;
-  CarOrderPage({Key? key, required this.car}) : super(key: key);
+  final User user;
+  CarOrderPage({
+    Key? key, 
+    required this.car,
+    required this.user
+  }) : super(key: key);
 
   @override
   State<CarOrderPage> createState() => _carOrderPage();
@@ -119,10 +125,8 @@ class _carOrderPage extends State<CarOrderPage> {
                                     : () {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(
-                                            builder: (context) => OrderDetailPage(
-                                                car: widget
-                                                    .car), // Navigate to OrderDetailPage
+                                          MaterialPageRoute( // Navigate to OrderDetailPage
+                                            builder: (context) => OrderDetailPage(car: widget.car, user: widget.user), 
                                           ),
                                         );
                                       }),

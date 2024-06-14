@@ -3,12 +3,16 @@ import "../../layouts/pageOnBG.dart";
 import "./login.dart";
 import "./register.dart";
 import "package:gaskeun_mobile/pages/home/main.dart";
+import "package:gaskeun_mobile/models/Profile.dart";
 
 class AuthPage extends StatefulWidget {
   final String title;
+  final void Function(int, String, String, String, String) setLoggedUser;
+
   AuthPage({
     Key? key, 
     required this.title,
+    required this.setLoggedUser
   }) : super(key: key);
 
   @override 
@@ -104,12 +108,15 @@ class _AuthPage extends State<AuthPage> {
               ( _authLocation == "login"
                 ? LoginPage(
                     title: "login", 
-                    onSuccessAuth: () {
-                      _onSuccessAuth("Login success", () { // TODO store logged user data!
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => HomePage(title: "Home", user: 1, index: 0))
-                        );
+                    onSuccessAuth: (int id, String name, String email, String role, String token) { // TODO store logged user data!
+                      _onSuccessAuth("Login success", () { 
+                        widget.setLoggedUser(id, name, email, role, token);
+
+                        // User user = User(id: id, nama: name, email: email, role: role, token: token);
+                        // Navigator.of(context).pushReplacement(
+                        //   MaterialPageRoute(
+                        //     builder: (context) => HomePage(title: "Home", user: user, index: 0))
+                        // );
                       });
                     },
                     onFailedAuth: _showErrorDialog

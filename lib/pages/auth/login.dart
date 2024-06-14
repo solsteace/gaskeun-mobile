@@ -5,7 +5,7 @@ import "package:gaskeun_mobile/components/GradientButton.dart";
 
 class LoginPage extends StatefulWidget {
   final String title;
-  final Function onSuccessAuth;
+  final Function(int, String, String, String, String) onSuccessAuth;
   final Function(String) onFailedAuth;
 
   LoginPage({Key? key, 
