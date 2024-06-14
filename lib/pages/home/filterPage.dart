@@ -3,12 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:gaskeun_mobile/layouts/pageOnBG.dart';
 import 'package:gaskeun_mobile/components/GradientButton.dart';
-import '../../components/car_card.dart';
-import '../../models/Profile.dart';
-import 'package:gaskeun_mobile/models/CarList.dart';
 import '../../api/api_service.dart';
-import 'package:gaskeun_mobile/api/api_mobil.dart' as apiMobil;
-import 'indexPage.dart';
+import 'filterResult.dart';
 
 class GradientToggleButton extends StatelessWidget {
   final String text;
@@ -124,7 +120,6 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
-  late Future<List<Car>> _futureCars;
   final ApiService _apiService = ApiService();
 
   DateTime? _pickupDate;
@@ -145,7 +140,6 @@ class _FilterPageState extends State<FilterPage> {
   @override
   void initState() {
     super.initState();
-    _futureCars = apiMobil.ApiService.fetchCars();
     _minPriceController.text = _indonesianCurrencyFormat.format(_minPrice);
     _maxPriceController.text = _indonesianCurrencyFormat.format(_maxPrice);
   }
@@ -166,12 +160,6 @@ class _FilterPageState extends State<FilterPage> {
           _returnDate = picked;
           _returnDateController.text = DateFormat('dd-MM-yyyy').format(_returnDate!);
         }
-        _futureCars = apiMobil.ApiService.fetchCarsWithFilter(
-          minPrice: _minPrice.toInt(),
-          maxPrice: _maxPrice.toInt(),
-          startDate: _pickupDate,
-          endDate: _returnDate,
-        );
       });
     }
   }
@@ -386,13 +374,6 @@ class _FilterPageState extends State<FilterPage> {
                             _maxPrice = values.end;
                             _minPriceController.text = _indonesianCurrencyFormat.format(_minPrice);
                             _maxPriceController.text = _indonesianCurrencyFormat.format(_maxPrice);
-
-                            _futureCars = apiMobil.ApiService.fetchCarsWithFilter(
-                              minPrice: _minPrice.toInt(),
-                              maxPrice: _maxPrice.toInt(),
-                              startDate: _pickupDate,
-                              endDate: _returnDate,
-                            );
                           });
                         },
                       ),
@@ -621,6 +602,21 @@ class _FilterPageState extends State<FilterPage> {
                       print('Min Passenger Count: ${9 - _minPassengerCount}');
                       print('Selected Transmission: ${transmissionTypes[_selectedTransmission.indexOf(true)]}');
                       print('Selected Brand: $_selectedBrand');
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FilterResultPage(
+                            pickupDate: formattedPickupDate.toString(),
+                            returnDate: formattedReturnDate.toString(),
+                            minPrice: int.parse(_minPriceController.text.replaceAll('.', '')),
+                            maxPrice: int.parse(_maxPriceController.text.replaceAll('.', '')),
+                            numPassengers: 9 - _minPassengerCount,
+                            brand: _selectedBrand,
+                            transmission: transmissionTypes[_selectedTransmission.indexOf(true)],
+                          ),
+                        ),
+                      );
                     },
                     text: 'Cari Mobil',
                   ),

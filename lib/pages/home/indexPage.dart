@@ -364,9 +364,7 @@ class _IndexPageState extends State<IndexPage> {
                               FilteringTextInputFormatter.digitsOnly,
                             ],
                             onChanged: (value) {
-                              setState(() {
-                                _minPrice = double.tryParse(value) ?? 0;
-                              });
+                              _minPrice = double.tryParse(value) ?? 0;
                             },
                             readOnly: true, // Add this line
                           ),
@@ -390,9 +388,7 @@ class _IndexPageState extends State<IndexPage> {
                               FilteringTextInputFormatter.digitsOnly,
                             ],
                             onChanged: (value) {
-                              setState(() {
-                                _maxPrice = double.tryParse(value) ?? 1000000;
-                              });
+                              _maxPrice = double.tryParse(value) ?? 1000000;
                             },
                             readOnly: true, // Add this line
                           ),
@@ -406,18 +402,36 @@ class _IndexPageState extends State<IndexPage> {
                       DateTime? pickupDate;
                       DateTime? returnDate;
                       if (_pickupDateController.text.isNotEmpty) {
-                        pickupDate = DateFormat('dd-MM-yyyy').parse(_pickupDateController.text);
+                        pickupDate = DateFormat('dd-MM-yyyy').parse(
+                            _pickupDateController.text);
                       }
                       if (_returnDateController.text.isNotEmpty) {
-                        returnDate = DateFormat('dd-MM-yyyy').parse(_returnDateController.text);
+                        returnDate = DateFormat('dd-MM-yyyy').parse(
+                            _returnDateController.text);
                       }
-                      String formattedPickupDate = pickupDate != null ? DateFormat('yyyy-MM-dd').format(pickupDate) : '';
-                      String formattedReturnDate = returnDate != null ? DateFormat('yyyy-MM-dd').format(returnDate) : '';
+                      String formattedPickupDate = pickupDate != null
+                          ? DateFormat('yyyy-MM-dd').format(pickupDate)
+                          : '';
+                      String formattedReturnDate = returnDate != null
+                          ? DateFormat('yyyy-MM-dd').format(returnDate)
+                          : '';
 
                       print('Pickup Date: $formattedPickupDate');
                       print('Return Date: $formattedReturnDate');
-                      print('Min Price: ${int.parse(_minPriceController.text.replaceAll('.', ''))}');
-                      print('Max Price: ${int.parse(_maxPriceController.text.replaceAll('.', ''))}');
+                      print('Min Price: ${int.parse(_minPriceController.text
+                          .replaceAll('.', ''))}');
+                      print('Max Price: ${int.parse(_maxPriceController.text
+                          .replaceAll('.', ''))}');
+
+                      // ToDo: I want the filter by date and price to work
+                      setState(() {
+                        _futureCars = apiMobil.ApiService.fetchCarsWithDetails(
+                          startDate: formattedPickupDate.toString(),
+                          endDate: formattedReturnDate.toString(),
+                          minPrice: int.parse(_minPriceController.text.replaceAll('.', '')),
+                          maxPrice: int.parse(_maxPriceController.text.replaceAll('.', '')),
+                        );
+                      });
                     },
                     text: 'Cari Mobil',
                   ),
