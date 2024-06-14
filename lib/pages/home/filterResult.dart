@@ -61,6 +61,17 @@ class _FilterResultState extends State<FilterResultPage> {
             return Center(child: Text('No cars available'));
           } else {
             List<Car> cars = snapshot.data!;
+
+            if(widget.brand != ''){
+              cars = cars.where((car) => car.brand.toLowerCase() == widget.brand!.toLowerCase()).toList();
+            } else if(widget.transmission != ''){
+              cars = cars.where((car) => car.transmisi.toLowerCase() == widget.transmission!.toLowerCase()).toList();
+            }
+            cars = cars.where((car) => car.kapasitas >= widget.numPassengers!).toList();
+            cars = cars.where((car) => car.hargaSewa >= widget.minPrice!).toList();
+            cars = cars.where((car) => car.hargaSewa <= widget.maxPrice!).toList();
+
+
             return PageOnBG(
               children: <Widget>[
                 Padding(
