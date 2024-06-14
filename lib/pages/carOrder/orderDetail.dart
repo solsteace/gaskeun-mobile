@@ -238,6 +238,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 controller: pickupLocationController,
                                 decoration: const InputDecoration(
                                   labelText: 'Lokasi Pengambilan',
+                                  helperText: 'Kosongkan bila diambil di kantor',
                                 ),
                               ),
                             ),
@@ -281,6 +282,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 controller: returnLocationController,
                                 decoration: const InputDecoration(
                                   labelText: 'Lokasi Pengembalian',
+                                  helperText: 'Kosongkan bila dikembalikan di kantor',
                                 ),
                               ),
                             ),
