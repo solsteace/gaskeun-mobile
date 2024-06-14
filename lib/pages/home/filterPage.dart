@@ -1,40 +1,129 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import "package:gaskeun_mobile/layouts/pageOnBG.dart";
-import "package:gaskeun_mobile/components/GradientButton.dart";
+import 'package:gaskeun_mobile/layouts/pageOnBG.dart';
+import 'package:gaskeun_mobile/components/GradientButton.dart';
 import '../../components/car_card.dart';
 import '../../models/Profile.dart';
-import 'filterPage.dart';
 import 'package:gaskeun_mobile/models/CarList.dart';
 import '../../api/api_service.dart';
 import 'package:gaskeun_mobile/api/api_mobil.dart' as apiMobil;
+import 'indexPage.dart';
 
-String getGreetingMessage() {
-  var hour = DateTime.now().hour;
+class GradientToggleButton extends StatelessWidget {
+  final String text;
+  final bool isSelected;
+  final VoidCallback onPressed;
 
-  if (hour < 12) {
-    return 'Selamat Pagi!';
-  } else if (hour < 15) {
-    return 'Selamat Siang!';
-  } else if (hour < 18) {
-    return 'Selamat Sore!';
-  } else {
-    return 'Selamat Malam!';
+  GradientToggleButton({
+    required this.text,
+    required this.isSelected,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        decoration: BoxDecoration(
+          gradient: isSelected
+              ? LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [Color(0xFFFF9153), Color(0xFFFFD143)],
+          )
+              : null,
+          color: isSelected ? null : Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Color(0xFFFF9153)),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 14,
+            color: isSelected ? Colors.white : Color(0xFFFF9153),
+          ),
+        ),
+      ),
+    );
   }
 }
 
-class IndexPage extends StatefulWidget {
-  final String token;
+class CarBrandItem extends StatelessWidget {
+  final String brand;
+  final String imageAsset;
+  final bool isSelected;
+  final VoidCallback onPressed;
 
-  const IndexPage({Key? key, required this.token}) : super(key: key);
+  CarBrandItem({
+    required this.brand,
+    required this.imageAsset,
+    required this.isSelected,
+    required this.onPressed,
+  });
 
   @override
-  _IndexPageState createState() => _IndexPageState();
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 80,
+        padding: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? null : Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Color(0xFFFF9153)),
+          gradient: isSelected
+              ? LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [Color(0xFFFF9153), Color(0xFFFFD143)],
+          )
+              : null,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: isSelected
+                      ? [Colors.white, Colors.white]
+                      : [Color(0xFFFF9153), Color(0xFFFFD143)],
+                ).createShader(bounds);
+              },
+              child: Image.asset(
+                imageAsset,
+                height: 40,
+                width: 40,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              brand,
+              style: TextStyle(
+                fontSize: 14,
+                color: isSelected ? Colors.white : Color(0xFFFF9153),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
-class _IndexPageState extends State<IndexPage> {
-  User? _user;
+class FilterPage extends StatefulWidget {
+  @override
+  _FilterPageState createState() => _FilterPageState();
+}
+
+class _FilterPageState extends State<FilterPage> {
   late Future<List<Car>> _futureCars;
   final ApiService _apiService = ApiService();
 
@@ -46,27 +135,19 @@ class _IndexPageState extends State<IndexPage> {
   double _maxPrice = 1000000;
   final _minPriceController = TextEditingController();
   final _maxPriceController = TextEditingController();
+  int _minPassengerCount = 8;
+  final _minPassengerCountController = TextEditingController();
+  List<String> transmissionTypes = ['', 'manual', 'matic'];
+  List<bool> _selectedTransmission = [true, false, false];
+  String _selectedBrand = '';
   final _indonesianCurrencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: '', decimalDigits: 0);
 
   @override
   void initState() {
     super.initState();
-    _fetchUserProfile();
     _futureCars = apiMobil.ApiService.fetchCars();
     _minPriceController.text = _indonesianCurrencyFormat.format(_minPrice);
     _maxPriceController.text = _indonesianCurrencyFormat.format(_maxPrice);
-  }
-
-  Future<void> _fetchUserProfile() async {
-    try {
-      Map<String, dynamic> userProfile = await _apiService.fetchUserProfile(widget.token);
-      setState(() {
-        _user = User.fromJson(userProfile);
-      });
-    } catch (e) {
-      // Handle errors here
-      print('Failed to fetch user profile: $e');
-    }
   }
 
   Future<void> _selectDate(BuildContext context, bool isPickup) async {
@@ -85,8 +166,29 @@ class _IndexPageState extends State<IndexPage> {
           _returnDate = picked;
           _returnDateController.text = DateFormat('dd-MM-yyyy').format(_returnDate!);
         }
+        _futureCars = apiMobil.ApiService.fetchCarsWithFilter(
+          minPrice: _minPrice.toInt(),
+          maxPrice: _maxPrice.toInt(),
+          startDate: _pickupDate,
+          endDate: _returnDate,
+        );
       });
     }
+  }
+
+  void _updateTransmissionFilter(int index) {
+    setState(() {
+      for (int i = 0; i < _selectedTransmission.length; i++) {
+        _selectedTransmission[i] = i == index;
+      }
+    });
+  }
+
+  void _updateBrandFilter(String brand) {
+    setState(() {
+      _selectedBrand = brand;
+      // Update your API call here if needed
+    });
   }
 
   @override
@@ -105,21 +207,26 @@ class _IndexPageState extends State<IndexPage> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Hallo, ${_user?.nama ?? 'Nama'}',
-                      style: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      getGreetingMessage(),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          color: Colors.white,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        const SizedBox(width: 16),
+                        const Text(
+                          'Filter Mobil',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -130,7 +237,7 @@ class _IndexPageState extends State<IndexPage> {
             bottom: 0,
             left: 0,
             right: 0,
-            height: MediaQuery.of(context).size.height * 0.72, // 50% of screen height
+            height: MediaQuery.of(context).size.height * 0.83, // 50% of screen height
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -149,61 +256,9 @@ class _IndexPageState extends State<IndexPage> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: MediaQuery.of(context).size.height * 0.31,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              child: FutureBuilder<List<Car>>(
-                // Car Cards
-                future: _futureCars, // Use _futureCars here
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('No cars available'));
-                  } else {
-                    List<Car> cars = snapshot.data!;
-                    cars = cars.where((car) => car.status == 'tersedia').toList();
-                    return ListView.builder(
-                      itemCount: cars.length,
-                      itemBuilder: (context, index) {
-                        Car car = cars[index];
-                        return CarCard(
-                          id: car.id,
-                          providerId: car.idPengguna,
-                          carImageId: car.idImage,
-                          brand: car.brand,
-                          model: car.model,
-                          people: car.kapasitas,
-                          price: car.hargaSewa,
-                          description: car.deskripsi,
-                          plateNumber: car.nomorPolisi,
-                          fuel: car.bahanBakar,
-                          transmission: car.transmisi,
-                          pathImage: car.image.path,
-                          available: car.status == 'tersedia',
-                        );
-                      },
-                    );
-                  }
-                },
-              ),
-            ),
-          ),
           // Form container
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.135, // Adjust this value as needed
+            top: MediaQuery.of(context).size.height * 0.13, // Adjust this value as needed
             left: 25,
             right: 25,
             child: Container(
@@ -223,7 +278,7 @@ class _IndexPageState extends State<IndexPage> {
               ),
               child: Column(
                 children: <Widget>[
-                  SizedBox(height: 5),
+                  SizedBox(height: 10),
                   Text('Tanggal Rental',
                       style:
                       TextStyle(
@@ -296,7 +351,7 @@ class _IndexPageState extends State<IndexPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 20),
                   Text(
                     'Harga Mobil',
                     style: TextStyle(
@@ -331,6 +386,13 @@ class _IndexPageState extends State<IndexPage> {
                             _maxPrice = values.end;
                             _minPriceController.text = _indonesianCurrencyFormat.format(_minPrice);
                             _maxPriceController.text = _indonesianCurrencyFormat.format(_maxPrice);
+
+                            _futureCars = apiMobil.ApiService.fetchCarsWithFilter(
+                              minPrice: _minPrice.toInt(),
+                              maxPrice: _maxPrice.toInt(),
+                              startDate: _pickupDate,
+                              endDate: _returnDate,
+                            );
                           });
                         },
                       ),
@@ -388,10 +450,161 @@ class _IndexPageState extends State<IndexPage> {
                     ],
                   ),
                   SizedBox(height: 20),
+                  Text(
+                    'Jumlah Penumpang',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()..scale(-1.0, 1.0), // This flips the slider horizontally
+                    child: ShaderMask(
+                      shaderCallback: (Rect bounds) {
+                        return LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [Color(0xFFFF9153), Color(0xFFFFD143)],
+                        ).createShader(bounds);
+                      },
+                      child: Slider(
+                        activeColor: Colors.white,
+                        inactiveColor: Colors.transparent,
+                        value: _minPassengerCount.toDouble(),
+                        min: 1,
+                        max: 8,
+                        divisions: 7,
+                        onChanged: (double value) {
+                          setState(() {
+                            _minPassengerCount = value.round();
+                            _minPassengerCountController.text = _minPassengerCount.toString();
+                            // Update your API call here
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25), // Adjust the padding as needed
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List<Widget>.generate(8, (index) {
+                        return Text(
+                          (index + 1).toString(),
+                          style: TextStyle(fontSize: 16),
+                        );
+                      }),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Create the tranmission options here (semua, manual, matic)
+                  Text(
+                    'Transmisi',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      GradientToggleButton(
+                        text: 'Semua',
+                        isSelected: _selectedTransmission[0],
+                        onPressed: () => _updateTransmissionFilter(0),
+                      ),
+                      GradientToggleButton(
+                        text: 'Manual',
+                        isSelected: _selectedTransmission[1],
+                        onPressed: () => _updateTransmissionFilter(1),
+                      ),
+                      GradientToggleButton(
+                        text: 'Matic',
+                        isSelected: _selectedTransmission[2],
+                        onPressed: () => _updateTransmissionFilter(2),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  // Car brand selection here
+                  Text(
+                    'Brand Mobil',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: <Widget>[
+                        CarBrandItem(
+                          brand: 'Semua',
+                          imageAsset: 'assets/img/img-logoAll.png',
+                          isSelected: _selectedBrand == '',
+                          onPressed: () => _updateBrandFilter(''),
+                        ),
+                        SizedBox(width: 10),
+                        CarBrandItem(
+                          brand: 'Toyota',
+                          isSelected: _selectedBrand == 'toyota',
+                          imageAsset: 'assets/img/img-logoToyota.png',
+                          onPressed: () => _updateBrandFilter('toyota'),
+                        ),
+                        SizedBox(width: 10),
+                        CarBrandItem(
+                          brand: 'Honda',
+                          imageAsset: 'assets/img/img-logoHonda.png',
+                          isSelected: _selectedBrand == 'honda',
+                          onPressed: () => _updateBrandFilter('honda'),
+                        ),
+                        SizedBox(width: 10),
+                        CarBrandItem(
+                          brand: 'Mitsubishi',
+                          isSelected: _selectedBrand == 'mitsubishi',
+                          imageAsset: 'assets/img/img-logoMitsubishipng.png',
+                          onPressed: () => _updateBrandFilter('mitsubishi'),
+                        ),
+                        SizedBox(width: 10),
+                        CarBrandItem(
+                          brand: 'Nissan',
+                          imageAsset: 'assets/img/img-logoNissan.png',
+                          isSelected: _selectedBrand == 'nissan',
+                          onPressed: () => _updateBrandFilter('nissan'),
+                        ),
+                        SizedBox(width: 10),
+                        CarBrandItem(
+                          brand: 'Suzuki',
+                          imageAsset: 'assets/img/img-logoSuzuki.png',
+                          isSelected: _selectedBrand == 'suzuki',
+                          onPressed: () => _updateBrandFilter('suzuki'),
+                        ),
+                        SizedBox(width: 10),
+                        CarBrandItem(
+                          brand: 'Daihatsu',
+                          imageAsset: 'assets/img/img-logoDaihatsu.png',
+                          isSelected: _selectedBrand == 'daihatsu',
+                          onPressed: () => _updateBrandFilter('daihatsu'),
+                        ),
+                        SizedBox(width: 10),
+                        CarBrandItem(
+                          brand: 'Ford',
+                          imageAsset: 'assets/img/img-logoFord.png',
+                          isSelected: _selectedBrand == 'ford',
+                          onPressed: () => _updateBrandFilter('ford'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
                   GradientButton(
                     onPressed: () {
                       DateTime? pickupDate;
                       DateTime? returnDate;
+
                       if (_pickupDateController.text.isNotEmpty) {
                         pickupDate = DateFormat('dd-MM-yyyy').parse(_pickupDateController.text);
                       }
@@ -405,51 +618,13 @@ class _IndexPageState extends State<IndexPage> {
                       print('Return Date: $formattedReturnDate');
                       print('Min Price: ${int.parse(_minPriceController.text.replaceAll('.', ''))}');
                       print('Max Price: ${int.parse(_maxPriceController.text.replaceAll('.', ''))}');
+                      print('Min Passenger Count: ${9 - _minPassengerCount}');
+                      print('Selected Transmission: ${transmissionTypes[_selectedTransmission.indexOf(true)]}');
+                      print('Selected Brand: $_selectedBrand');
                     },
                     text: 'Cari Mobil',
                   ),
-                  SizedBox(height: 5),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Divider(
-                          color: Colors.grey,
-                          height: 15,
-                          thickness: 1,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          'atau',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          color: Colors.grey,
-                          height: 15,
-                          thickness: 1,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  GradientButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FilterPage(),
-                        ),
-                      );
-                    },
-                    text: 'Lebih Banyak Filter',
-                  ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 10),
                 ],
               ),
             ),
