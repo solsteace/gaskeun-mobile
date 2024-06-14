@@ -45,6 +45,7 @@ class ApiService {
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(response.body);
       List<Car> cars = body.map((dynamic item) => Car.fromJson(item)).toList();
+      print(cars);
       return cars;
     } else {
       throw Exception("Failed to load cars");
