@@ -101,16 +101,16 @@ class CarCardBooking extends StatelessWidget {
                         ? ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,
+                              disabledBackgroundColor: Colors.green,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            onPressed: (){
-
-                            },
+                            onPressed: null,
                             child: const Text(
                               "Pesanan Selesai",
-                              style: TextStyle(color: Colors.white, fontSize: 16),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
                             ),
                           )
                         : ElevatedButton(
@@ -121,12 +121,11 @@ class CarCardBooking extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            onPressed: (){
-
-                            },
+                            onPressed: null,
                             child: const Text(
                               "Pesanan Belum Selesai",
-                              style: TextStyle(color: Colors.white, fontSize: 16),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
                             ),
                           ),
                   ),
@@ -159,7 +158,8 @@ class CarCardBooking extends StatelessWidget {
                             onPressed: null,
                             child: const Text(
                               "Belum Dibayar",
-                              style: TextStyle(color: Colors.white),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
                             ),
                           ),
                   ),

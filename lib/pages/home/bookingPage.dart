@@ -87,7 +87,7 @@ class _BookingPageState extends State<BookingPage> {
                                   returnDate: order.returnDate,
                                   pathImage: order.imagePath,
                                   lunas: order.lunas,
-                                  status: "belum selesai",
+                                  status: order.status,
                                   orderingUser: widget.loggedUser,
                                 ))
                             .toList(),

@@ -157,18 +157,20 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         Divider(),
-                        Spacer(),
+                        // Spacer(),
+                        SizedBox(height: 100),
                         Center(
                           child: ElevatedButton(
                             onPressed: _logout,
                             child: Text(
                               'Logout',
-                              style: TextStyle(color: Colors.white),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
                             ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 50, vertical: 15),
+                                  horizontal: 30, vertical: 15),
                               textStyle: TextStyle(fontSize: 15),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
