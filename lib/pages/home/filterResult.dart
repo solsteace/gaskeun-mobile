@@ -7,23 +7,23 @@ import 'package:gaskeun_mobile/models/CarList.dart';
 import 'package:gaskeun_mobile/api/api_mobil.dart';
 
 class FilterResultPage extends StatefulWidget {
-  final DateTime pickupDate;
-  final DateTime returnDate;
-  final double minPrice;
-  final double maxPrice;
-  final int numPassengers;
-  final String brand;
-  final String transmission;
+  final DateTime? pickupDate;
+  final DateTime? returnDate;
+  final int? minPrice;
+  final int? maxPrice;
+  final int? numPassengers;
+  final String? brand;
+  final String? transmission;
 
   const FilterResultPage({
     Key? key,
-    required this.pickupDate,
-    required this.returnDate,
-    required this.minPrice,
-    required this.maxPrice,
-    required this.numPassengers,
-    required this.brand,
-    required this.transmission,
+    this.pickupDate,
+    this.returnDate,
+    this.minPrice,
+    this.maxPrice,
+    this.numPassengers,
+    this.brand,
+    this.transmission,
   }) : super(key: key);
 
   @override
@@ -36,7 +36,15 @@ class _FilterResultState extends State<FilterResultPage> {
   @override
   void initState() {
     super.initState();
-    _futureCars = ApiService.fetchCars();
+    _futureCars = ApiService.fetchCarsWithFilter(
+    brand: widget.brand,
+    transmission: widget.transmission,
+    numPassengers: widget.numPassengers,
+    minPrice: widget.minPrice,
+    maxPrice: widget.maxPrice,
+    startDate: widget.pickupDate,
+    endDate: widget.returnDate,
+    );
   }
 
   @override
