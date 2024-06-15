@@ -444,6 +444,7 @@ class _IndexPageState extends State<IndexPage> {
                             numPassengers: 9 - 8,
                             brand: '',
                             transmission: '',
+                            loggedUser: widget.loggedUser,
                           ),
                         ),
                       );
@@ -485,7 +486,7 @@ class _IndexPageState extends State<IndexPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FilterPage(),
+                          builder: (context) => FilterPage(loggedUser: widget.loggedUser,),
                         ),
                       );
                     },

@@ -5,6 +5,7 @@ import 'package:gaskeun_mobile/layouts/pageOnBG.dart';
 import 'package:gaskeun_mobile/components/GradientButton.dart';
 import '../../api/api_service.dart';
 import 'filterResult.dart';
+import 'package:gaskeun_mobile/models/Profile.dart';
 
 class GradientToggleButton extends StatelessWidget {
   final String text;
@@ -115,6 +116,12 @@ class CarBrandItem extends StatelessWidget {
 }
 
 class FilterPage extends StatefulWidget {
+  final User loggedUser;
+  const FilterPage({
+    Key? key,
+    required this.loggedUser
+  }) : super(key: key);
+
   @override
   _FilterPageState createState() => _FilterPageState();
 }
@@ -614,6 +621,7 @@ class _FilterPageState extends State<FilterPage> {
                             numPassengers: 9 - _minPassengerCount,
                             brand: _selectedBrand,
                             transmission: transmissionTypes[_selectedTransmission.indexOf(true)],
+                            loggedUser: widget.loggedUser,
                           ),
                         ),
                       );
