@@ -1,35 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:gaskeun_mobile/layouts/pageOnBG.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:gaskeun_mobile/pages/auth/main.dart';
 import '../../api/api_service.dart';
 import '../../models/Profile.dart';
+import "package:gaskeun_mobile/components/carousel.dart";
 
 class ProfilePage extends StatefulWidget {
   final String token;
 
-  ProfilePage({required this.token});
+  ProfilePage({ required this.token, });
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late Future<User> futureUser;
+  late Future<Profile> futureProfile;
 
   @override
   void initState() {
     super.initState();
-    futureUser = ApiService().fetchUserProfile(widget.token).then((data) {
-      return User.fromJson(data);
+    futureProfile = ApiService().fetchUserProfile(widget.token).then((data) {
+      return Profile.fromJson(data);
     });
   }
 
-  void _logout() {
-    // Implementasi fungsi logout
-    // Misalnya, navigasi ke halaman login dan hapus token dari penyimpanan
-  }
+    void _logout() {
+      // Implementasi fungsi logout
+      // Misalnya, navigasi ke halaman login dan hapus token dari penyimpanan
+
+      // Clear stuff on local storage (Seems optimizable)
+      // final FlutterSecureStorage _storage = FlutterSecureStorage();
+      // await _storage.delete(key: "user_id");
+      // await _storage.delete(key: "user_name");
+      // await _storage.delete(key: "user_email");
+      // await _storage.delete(key: "user_role");
+      // await _storage.delete(key: "user_token");
+    }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: PageOnBG(
         children: <Widget>[
@@ -69,8 +81,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               padding: const EdgeInsets.all(25), // Mengatur padding
               width: double.infinity,
-              child: FutureBuilder<User>(
-                future: futureUser,
+              child: FutureBuilder<Profile>(
+                future: futureProfile,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
@@ -79,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   } else if (!snapshot.hasData) {
                     return Center(child: Text('No data available'));
                   } else {
-                    User user = snapshot.data!;
+                    Profile user = snapshot.data!;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[

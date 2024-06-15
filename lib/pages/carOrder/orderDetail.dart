@@ -7,11 +7,18 @@ import 'package:gaskeun_mobile/models/Car.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:gaskeun_mobile/api/api_create_pesanan.dart';
+import "package:gaskeun_mobile/models/Profile.dart";
 import './orderSuccess.dart';
 
 class OrderDetailPage extends StatefulWidget {
   final Car car;
-  OrderDetailPage({Key? key, required this.car}) : super(key: key);
+  final User user;
+
+  OrderDetailPage({
+    Key? key,
+    required this.car,
+    required this.user,
+  }) : super(key: key);
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
@@ -71,7 +78,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       try {
         final paymentId = await ApiService.createPayment();
         final orderId = await ApiService.createOrder(
-          22, // Replace with the actual id_pemesan
+          widget.user.id, // Replace with the actual id_pemesan
           widget.car.id,
           paymentId!,
           fullName!,
@@ -86,7 +93,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => OrderSuccessPage(),
+            builder: (context) => OrderSuccessPage(loggedUser: widget.user),
           ),
         );
       } catch (error) {
